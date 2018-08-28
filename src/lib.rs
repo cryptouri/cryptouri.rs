@@ -19,6 +19,7 @@
 extern crate clear_on_drop;
 #[macro_use]
 extern crate failure;
+extern crate generic_array;
 extern crate iq_bech32;
 
 use clear_on_drop::clear::Clear;

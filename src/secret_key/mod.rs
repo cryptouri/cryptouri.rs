@@ -25,11 +25,11 @@ pub enum SecretKey {
 
 impl SecretKey {
     /// Create a new `SecretKey` for the given algorithm
-    pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
+    pub fn new(alg: &str, slice: &[u8]) -> Result<Self, Error> {
         let result = match alg {
-            AES128GCM_ALG_ID => SecretKey::Aes128Gcm(Aes128GcmKey::new(bytes)?),
-            AES256GCM_ALG_ID => SecretKey::Aes256Gcm(Aes256GcmKey::new(bytes)?),
-            ED25519_ALG_ID => SecretKey::Ed25519(Ed25519SecretKey::new(bytes)?),
+            AES128GCM_ALG_ID => SecretKey::Aes128Gcm(Aes128GcmKey::from_slice(slice)?),
+            AES256GCM_ALG_ID => SecretKey::Aes256Gcm(Aes256GcmKey::from_slice(slice)?),
+            ED25519_ALG_ID => SecretKey::Ed25519(Ed25519SecretKey::from_slice(slice)?),
             _ => fail!(AlgorithmInvalid, "{}", alg),
         };
 
