@@ -26,13 +26,13 @@ macro_rules! secret_key_test {
 
             #[test]
             fn serialize_uri() {
-                let key = $keytype::new($bytes).unwrap();
+                let key = $keytype::from_slice($bytes).unwrap();
                 assert_eq!(&key.to_uri_string(), $uri);
             }
 
             #[test]
             fn serialize_dasherized() {
-                let key = $keytype::new($bytes).unwrap();
+                let key = $keytype::from_slice($bytes).unwrap();
                 assert_eq!(&key.to_dasherized_string(), $dasherized);
             }
         }

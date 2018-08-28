@@ -11,8 +11,14 @@ pub const ED25519_SECKEY_SIZE: usize = 32;
 pub struct Ed25519SecretKey([u8; ED25519_SECKEY_SIZE]);
 
 impl Ed25519SecretKey {
-    /// Create a new Ed25519 secret key
-    pub fn new(slice: &[u8]) -> Result<Self, Error> {
+    /// Create a new Ed25519SecretKey object from the given byte array
+    /// (containing a randomly chosen secret scalar
+    pub fn new(bytes: [u8; ED25519_SECKEY_SIZE]) -> Self {
+        Ed25519SecretKey(bytes)
+    }
+
+    /// Create a new Ed25519 secret key from a byte slice
+    pub fn from_slice(slice: &[u8]) -> Result<Self, Error> {
         if slice.len() != ED25519_SECKEY_SIZE {
             fail!(
                 ParseError,
@@ -22,10 +28,10 @@ impl Ed25519SecretKey {
             );
         }
 
-        let mut digest_bytes = [0u8; ED25519_SECKEY_SIZE];
-        digest_bytes.copy_from_slice(slice);
+        let mut bytes = [0u8; ED25519_SECKEY_SIZE];
+        bytes.copy_from_slice(slice);
 
-        Ok(Ed25519SecretKey(digest_bytes))
+        Ok(Self::new(bytes))
     }
 }
 
