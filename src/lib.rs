@@ -1,5 +1,5 @@
-//! CryptoURI: URI-based format for encoding cryptographic objects (keys, signatures, etc)
-//! using bech32 encoding/checksums
+//! CryptoURI: URN-like namespace for cryptographic objects (keys, signatures, etc)
+//! with Bech32 encoding/checksums
 
 #![crate_name = "cryptouri"]
 #![crate_type = "rlib"]
@@ -7,11 +7,14 @@
 #![deny(
     warnings,
     missing_docs,
-    unsafe_code,
     unused_import_braces,
     unused_qualifications
 )]
-#![doc(html_root_url = "https://docs.rs/cryptouri/0.0.0")]
+#![forbid(unsafe_code)]
+#![doc(
+    html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff",
+    html_root_url = "https://docs.rs/cryptouri/0.0.1"
+)]
 
 extern crate clear_on_drop;
 #[macro_use]
@@ -62,17 +65,17 @@ use public_key::PublicKey;
 use secret_key::SecretKey;
 use signature::Signature;
 
-/// CryptoURI: URI-based format for encoding cryptographic objects
-pub struct CryptoURI {
-    /// Kind of CryptoURI (e.g. secret key, public key, digests, signatures)
-    kind: CryptoURIKind,
+/// `CryptoUri`: URI-based format for encoding cryptographic objects
+pub struct CryptoUri {
+    /// Kind of `CryptoUri` (e.g. secret key, public key, digests, signatures)
+    kind: CryptoUriKind,
 
     /// URI fragment (i.e. everything after `#`)
     fragment: Option<String>,
 }
 
-/// Kinds of CryptoURIs
-pub enum CryptoURIKind {
+/// Kinds of `CryptoUri`s
+pub enum CryptoUriKind {
     /// Digests (e.g. key digests symmetric secret keys, asymmetric public keys, or other data)
     Digest(Digest),
 
@@ -86,26 +89,26 @@ pub enum CryptoURIKind {
     Signature(Signature),
 }
 
-impl CryptoURI {
-    /// Parse a CryptoURI from a bech32 encoded string using the given encoding
+impl CryptoUri {
+    /// Parse a `CryptoUri` from a Bech32 encoded string using the given encoding
     // TODO: parser generator rather than handrolling this?
     fn parse(uri: &str, encoding: &Encoding) -> Result<Self, Error> {
         let (prefix, mut data, fragment) = decode(uri, encoding)?;
 
         let kind = if prefix.starts_with(encoding.digest_scheme) {
-            CryptoURIKind::Digest(Digest::new(&prefix[encoding.digest_scheme.len()..], &data)?)
+            CryptoUriKind::Digest(Digest::new(&prefix[encoding.digest_scheme.len()..], &data)?)
         } else if prefix.starts_with(encoding.public_key_scheme) {
-            CryptoURIKind::PublicKey(PublicKey::new(
+            CryptoUriKind::PublicKey(PublicKey::new(
                 &prefix[encoding.public_key_scheme.len()..],
                 &data,
             )?)
         } else if prefix.starts_with(encoding.secret_key_scheme) {
-            CryptoURIKind::SecretKey(SecretKey::new(
+            CryptoUriKind::SecretKey(SecretKey::new(
                 &prefix[encoding.secret_key_scheme.len()..],
                 &data,
             )?)
         } else if prefix.starts_with(encoding.signature_scheme) {
-            CryptoURIKind::Signature(Signature::new(
+            CryptoUriKind::Signature(Signature::new(
                 &prefix[encoding.signature_scheme.len()..],
                 &data,
             )?)
@@ -119,69 +122,69 @@ impl CryptoURI {
         Ok(Self { kind, fragment })
     }
 
-    /// Parse a CryptoURI
+    /// Parse a `CryptoUri`
     pub fn parse_uri(uri: &str) -> Result<Self, Error> {
         Self::parse(uri, URI_ENCODING)
     }
 
-    /// Parse a CryptoURI in URI-embeddable (a.k.a. "dasherized") encoding
+    /// Parse a `CryptoUri` in URI-embeddable (a.k.a. "dasherized") encoding
     pub fn parse_dasherized(token: &str) -> Result<Self, Error> {
         Self::parse(token, DASHERIZED_ENCODING)
     }
 
-    /// Return the `CryptoURIKind` for this URI
-    pub fn kind(&self) -> &CryptoURIKind {
+    /// Return the `CryptoUriKind` for this URI
+    pub fn kind(&self) -> &CryptoUriKind {
         &self.kind
     }
 
-    /// Return a `SecretKey` if the underlying URI is a `secret.key:`
+    /// Return a `SecretKey` if the underlying URI is a `crypto:secret:key:`
     pub fn secret_key(&self) -> Option<&SecretKey> {
         match self.kind {
-            CryptoURIKind::SecretKey(ref key) => Some(key),
+            CryptoUriKind::SecretKey(ref key) => Some(key),
             _ => None,
         }
     }
 
-    /// Is this CryptoURI a `secret.key:`?
+    /// Is this `CryptoUri` a `crypto:secret:key:`?
     pub fn is_secret_key(&self) -> bool {
         self.secret_key().is_some()
     }
 
-    /// Return a `PublicKey` if the underlying URI is a `public.key:`
+    /// Return a `PublicKey` if the underlying URI is a `crypto:public:key:`
     pub fn public_key(&self) -> Option<&PublicKey> {
         match self.kind {
-            CryptoURIKind::PublicKey(ref key) => Some(key),
+            CryptoUriKind::PublicKey(ref key) => Some(key),
             _ => None,
         }
     }
 
-    /// Is this CryptoURI a `public.key:`?
+    /// Is this CryptoUri a `crypto:public:key:`?
     pub fn is_public_key(&self) -> bool {
         self.public_key().is_some()
     }
 
-    /// Return a `Digest` if the underlying URI is a `public.digest:`
+    /// Return a `Digest` if the underlying URI is a `crypto:public:digest:`
     pub fn digest(&self) -> Option<&Digest> {
         match self.kind {
-            CryptoURIKind::Digest(ref digest) => Some(digest),
+            CryptoUriKind::Digest(ref digest) => Some(digest),
             _ => None,
         }
     }
 
-    /// Is this CryptoURI a `public.digest:`?
+    /// Is this CryptoUri a `crypto:public:digest:`?
     pub fn is_digest(&self) -> bool {
         self.digest().is_some()
     }
 
-    /// Return a `Signature` if the underlying URI is a `public.signature:`
+    /// Return a `Signature` if the underlying URI is a `crypto:public:signature:`
     pub fn signature(&self) -> Option<&Signature> {
         match self.kind {
-            CryptoURIKind::Signature(ref sig) => Some(sig),
+            CryptoUriKind::Signature(ref sig) => Some(sig),
             _ => None,
         }
     }
 
-    /// Is this CryptoURI a `public.signature:`?
+    /// Is this CryptoUri a `crypto:public:signature:`?
     pub fn is_signature(&self) -> bool {
         self.signature().is_some()
     }
@@ -192,24 +195,24 @@ impl CryptoURI {
     }
 }
 
-impl Encodable for CryptoURI {
-    /// Serialize this `CryptoURI` as a URI-encoded `String`
+impl Encodable for CryptoUri {
+    /// Serialize this `CryptoUri` as a URI-encoded `String`
     fn to_uri_string(&self) -> String {
         match self.kind {
-            CryptoURIKind::Digest(ref digest) => digest.to_uri_string(),
-            CryptoURIKind::PublicKey(ref pk) => pk.to_uri_string(),
-            CryptoURIKind::SecretKey(ref sk) => sk.to_uri_string(),
-            CryptoURIKind::Signature(ref sig) => sig.to_uri_string(),
+            CryptoUriKind::Digest(ref digest) => digest.to_uri_string(),
+            CryptoUriKind::PublicKey(ref pk) => pk.to_uri_string(),
+            CryptoUriKind::SecretKey(ref sk) => sk.to_uri_string(),
+            CryptoUriKind::Signature(ref sig) => sig.to_uri_string(),
         }
     }
 
-    /// Serialize this `CryptoURI` as a "dasherized" `String`
+    /// Serialize this `CryptoUri` as a "dasherized" `String`
     fn to_dasherized_string(&self) -> String {
         match self.kind {
-            CryptoURIKind::Digest(ref digest) => digest.to_dasherized_string(),
-            CryptoURIKind::PublicKey(ref pk) => pk.to_dasherized_string(),
-            CryptoURIKind::SecretKey(ref sk) => sk.to_dasherized_string(),
-            CryptoURIKind::Signature(ref sig) => sig.to_dasherized_string(),
+            CryptoUriKind::Digest(ref digest) => digest.to_dasherized_string(),
+            CryptoUriKind::PublicKey(ref pk) => pk.to_dasherized_string(),
+            CryptoUriKind::SecretKey(ref sk) => sk.to_dasherized_string(),
+            CryptoUriKind::Signature(ref sig) => sig.to_dasherized_string(),
         }
     }
 }

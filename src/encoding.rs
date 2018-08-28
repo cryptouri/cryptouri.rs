@@ -1,4 +1,4 @@
-/// Characters to use when encoding CryptoURIs
+/// Characters to use when encoding CryptoUris
 pub(crate) struct Encoding {
     /// Scheme prefix for digests
     pub digest_scheme: &'static str,
@@ -41,7 +41,7 @@ pub(crate) const DASHERIZED_ENCODING: &Encoding = &Encoding {
     fragment_delimiter: None,
 };
 
-/// Objects that can be encoded as CryptoURI
+/// Objects that can be encoded as CryptoUri
 pub trait Encodable {
     /// Encode this object in URI generic syntax
     fn to_uri_string(&self) -> String;

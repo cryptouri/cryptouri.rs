@@ -86,11 +86,11 @@ pub enum ErrorKind {
     #[fail(display = "decode error")]
     DecodeError,
 
-    /// Error parsing CryptoURI syntax
+    /// Error parsing CryptoUri syntax
     #[fail(display = "invalid key")]
     ParseError,
 
-    /// Unknown CryptoURI scheme
+    /// Unknown CryptoUri scheme
     #[fail(display = "unknown scheme")]
     SchemeInvalid,
 }
