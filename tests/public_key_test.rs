@@ -6,7 +6,7 @@ extern crate cryptouri;
 /// https://tools.ietf.org/html/rfc8032#section-7.1
 mod ed25519 {
     use cryptouri::public_key::Ed25519PublicKey;
-    use cryptouri::{CryptoURI, Encodable};
+    use cryptouri::{CryptoUri, Encodable};
 
     const EXAMPLE_URI: &str =
         "crypto:public:key:ed25519:6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydq3pkr2c";
@@ -21,7 +21,7 @@ mod ed25519 {
 
     #[test]
     fn parse_uri() {
-        let key = CryptoURI::parse_uri(EXAMPLE_URI).unwrap();
+        let key = CryptoUri::parse_uri(EXAMPLE_URI).unwrap();
         assert_eq!(
             key.public_key().unwrap().ed25519_key().unwrap().as_ref(),
             EXAMPLE_BYTES
@@ -30,7 +30,7 @@ mod ed25519 {
 
     #[test]
     fn parse_dasherized() {
-        let key = CryptoURI::parse_dasherized(EXAMPLE_DASHERIZED).unwrap();
+        let key = CryptoUri::parse_dasherized(EXAMPLE_DASHERIZED).unwrap();
         assert_eq!(
             key.public_key().unwrap().ed25519_key().unwrap().as_ref(),
             EXAMPLE_BYTES

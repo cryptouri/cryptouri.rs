@@ -4,11 +4,11 @@ macro_rules! secret_key_test {
     ($name:ident, $keytype:ident, $uri:expr, $dasherized:expr, $bytes:expr) => {
         mod $name {
             use cryptouri::secret_key::$keytype;
-            use cryptouri::{AsSecretSlice, CryptoURI, Encodable};
+            use cryptouri::{AsSecretSlice, CryptoUri, Encodable};
 
             #[test]
             fn parse_uri() {
-                let key = CryptoURI::parse_uri($uri).unwrap();
+                let key = CryptoUri::parse_uri($uri).unwrap();
                 assert_eq!(
                     key.secret_key().unwrap().$name().unwrap().as_secret_slice(),
                     $bytes
@@ -17,7 +17,7 @@ macro_rules! secret_key_test {
 
             #[test]
             fn parse_dasherized() {
-                let key = CryptoURI::parse_dasherized($dasherized).unwrap();
+                let key = CryptoUri::parse_dasherized($dasherized).unwrap();
                 assert_eq!(
                     key.secret_key().unwrap().$name().unwrap().as_secret_slice(),
                     $bytes
