@@ -4,14 +4,17 @@
 [![Docs][docs-image]][docs-link]
 ![Apache 2.0 Licensed][license-image]
 [![Build Status][build-image]][build-link]
+[![Gitter Chat][gitter-image]][gitter-link]
 
 [crate-image]: https://img.shields.io/crates/v/cryptouri.svg
 [crate-link]: https://crates.io/crates/cryptouri
 [docs-image]: https://docs.rs/cryptouri/badge.svg
 [docs-link]: https://docs.rs/cryptouri/
+[license-image]: https://img.shields.io/badge/license-MIT/Apache2.0-blue.svg
 [build-image]: https://circleci.com/gh/cryptouri/cryptouri-rs.svg?style=shield
 [build-link]: https://circleci.com/gh/cryptouri/cryptouri-rs
-[license-image]: https://img.shields.io/badge/license-MIT/Apache2.0-blue.svg
+[gitter-image]: https://badges.gitter.im/badge.svg
+[gitter-link]: https://gitter.im/cryptouri/Lobby
 
 A URI-like format for serializing cryptographic objects including keys,
 signatures, and digests using URI generic syntax:
@@ -40,6 +43,17 @@ to prevent human transcription errors by using an alphabet that eliminates
 similar-looking characters to avoid transcription errors and adds a checksum
 across the whole URI to detect these errors when they do happen.
 CryptoURIs which have been mis-transcribed will fail to decode.
+
+## Help and Discussion
+
+Have questions? Want to suggest a feature or change?
+
+* [Gitter]: web-based chat about **cryptouri**
+* [Google Group]: join via web or email ([cryptouri+subscribe@googlegroups.com])
+
+[Gitter]: https://gitter.im/cryptouri/Lobby
+[Google Group]: https://groups.google.com/forum/#!forum/cryptouri
+[cryptouri+subscribe@googlegroups.com]: mailto:cryptouri+subscribe@googlegroups.com
 
 ## Code of Conduct
 
