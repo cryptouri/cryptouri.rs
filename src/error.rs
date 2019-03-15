@@ -1,8 +1,6 @@
 use failure::{Backtrace, Context, Fail};
 use std::fmt::{self, Display};
 
-use iq_bech32::Error as Bech32Error;
-
 /// Error type
 #[derive(Debug)]
 pub struct Error {
@@ -38,7 +36,7 @@ impl Error {
 }
 
 impl Fail for Error {
-    fn cause(&self) -> Option<&Fail> {
+    fn cause(&self) -> Option<&dyn Fail> {
         self.inner.cause()
     }
 
@@ -63,11 +61,17 @@ impl From<Context<ErrorKind>> for Error {
 }
 
 impl Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.description {
             Some(ref desc) => write!(f, "{}: {}", &self.inner, desc),
             None => Display::fmt(&self.inner, f),
         }
+    }
+}
+
+impl From<subtle_encoding::Error> for Error {
+    fn from(_err: subtle_encoding::Error) -> Error {
+        panic!("unimplemented");
     }
 }
 
@@ -98,14 +102,14 @@ pub enum ErrorKind {
 /// Create a new error (of a given enum variant) with a formatted message
 macro_rules! err {
     ($kind:ident, $msg:expr) => {
-        ::error::Error::with_description(
-            ::error::ErrorKind::$kind,
+        crate::error::Error::with_description(
+            crate::error::ErrorKind::$kind,
             $msg.to_string()
         )
     };
     ($kind:ident, $fmt:expr, $($arg:tt)+) => {
-        ::error::Error::with_description(
-            ::error::ErrorKind::$kind,
+        crate::error::Error::with_description(
+            crate::error::ErrorKind::$kind,
             format!($fmt, $($arg)+)
         )
     };
@@ -119,17 +123,4 @@ macro_rules! fail {
     ($kind:ident, $fmt:expr, $($arg:tt)+) => {
         return Err(err!($kind, $fmt, $($arg)+).into());
     };
-}
-
-impl From<Bech32Error> for Error {
-    fn from(error: Bech32Error) -> Error {
-        let description = error.to_string();
-
-        match error {
-            Bech32Error::SeparatorMissing => err!(ParseError, description),
-            Bech32Error::ChecksumInvalid => err!(ChecksumInvalid, description),
-            Bech32Error::LengthInvalid => err!(ParseError, description),
-            _ => err!(DecodeError, description),
-        }
-    }
 }

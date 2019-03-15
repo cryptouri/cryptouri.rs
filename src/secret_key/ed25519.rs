@@ -1,8 +1,8 @@
-use clear_on_drop::clear::Clear;
+//! The Ed25519 digital signature algorithm
 
 use super::AsSecretSlice;
-use algorithm::ED25519_ALG_ID;
-use error::Error;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
+use zeroize::Zeroize;
 
 /// Size of an Ed25519 secret key
 pub const ED25519_SECKEY_SIZE: usize = 32;
@@ -43,7 +43,7 @@ impl AsSecretSlice for Ed25519SecretKey {
 
 impl Drop for Ed25519SecretKey {
     fn drop(&mut self) {
-        self.0.as_mut().clear()
+        self.0.as_mut().zeroize()
     }
 }
 

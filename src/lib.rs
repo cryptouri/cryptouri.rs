@@ -3,31 +3,14 @@
 
 #![crate_name = "cryptouri"]
 #![crate_type = "rlib"]
-#![allow(unknown_lints, suspicious_arithmetic_impl)]
-#![deny(
-    warnings,
-    missing_docs,
-    unused_import_braces,
-    unused_qualifications
-)]
+#![deny(warnings, missing_docs, unused_import_braces, unused_qualifications)]
 #![forbid(unsafe_code)]
 #![doc(
     html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff",
     html_root_url = "https://docs.rs/cryptouri/0.0.1"
 )]
 
-extern crate clear_on_drop;
-#[macro_use]
-extern crate failure;
-extern crate generic_array;
-extern crate iq_bech32;
-
-use clear_on_drop::clear::Clear;
-use iq_bech32::Bech32;
-
-//
-// Modules with macros
-//
+use failure;
 
 /// Error types (defined first so macros are available)
 #[macro_use]
@@ -36,10 +19,6 @@ pub mod error;
 /// String encoding configuration
 #[macro_use]
 mod encoding;
-
-//
-// Modules without macros
-//
 
 /// Cryptographic algorithm registry
 pub mod algorithm;
@@ -56,15 +35,18 @@ pub mod secret_key;
 /// Signature types
 pub mod signature;
 
-pub use encoding::Encodable;
-pub use secret_key::AsSecretSlice;
+pub use crate::{encoding::Encodable, secret_key::AsSecretSlice};
 
-use digest::Digest;
-use encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING};
-use error::Error;
-use public_key::PublicKey;
-use secret_key::SecretKey;
-use signature::Signature;
+use crate::{
+    digest::Digest,
+    encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
+    error::Error,
+    public_key::PublicKey,
+    secret_key::SecretKey,
+    signature::Signature,
+};
+use subtle_encoding::bech32::{self, Bech32};
+use zeroize::Zeroize;
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects
 pub struct CryptoUri {
@@ -117,8 +99,7 @@ impl CryptoUri {
             fail!(SchemeInvalid, "unknown CryptoURI prefix: {}", prefix)
         };
 
-        // Use `clear_on_drop` to wipe any potential secret data
-        data.as_mut_slice().clear();
+        data.as_mut_slice().zeroize();
 
         Ok(Self { kind, fragment })
     }
@@ -225,11 +206,12 @@ fn decode(uri: &str, encoding: &Encoding) -> Result<(String, Vec<u8>, Option<Str
     if let Some(delimiter) = encoding.fragment_delimiter {
         if let Some(pos) = uri.find(delimiter) {
             let fragment = uri[(pos + 1)..].to_owned();
-            let (prefix, data) = Bech32::new(encoding.delimiter).decode(&uri[..pos])?;
+            let (prefix, data) =
+                Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(&uri[..pos])?;
             return Ok((prefix, data, Some(fragment)));
         }
     }
 
-    let (prefix, data) = Bech32::new(encoding.delimiter).decode(uri)?;
+    let (prefix, data) = Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(uri)?;
     Ok((prefix, data, None))
 }

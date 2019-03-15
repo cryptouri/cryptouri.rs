@@ -8,19 +8,17 @@ version     = "0.0.1" # Also update html_root_url in lib.rs when bumping this
 authors     = ["Tony Arcieri <bascule@gmail.com>"]
 license     = "MIT OR Apache-2.0"
 homepage    = "https://cryptouri.org"
-repository  = "https://github.com/cryptouri/cryptouri-rs/"
+repository  = "https://github.com/cryptouri/cryptouri.rs/"
 readme      = "README.md"
+edition     = "2018"
 categories  = ["cryptography", "encoding"]
 keywords    = ["bech32", "cryptography", "keys", "security", "uri"]
 
 [badges]
-circle-ci = { repository = "cryptouri/cryptouri-rs" }
+travis-ci = { repository = "cryptouri/cryptouri.rs" }
 
 [dependencies]
-clear_on_drop = "0.2"
 failure = "0.1"
-generic-array = "0.11"
-iq-bech32 = "0"
-
-[features]
-nightly = ["clear_on_drop/nightly"]
+generic-array = "0.12"
+subtle-encoding = { version = "0.3", features = ["bech32-preview"] }
+zeroize = "0.5"

@@ -1,6 +1,4 @@
-use algorithm::ED25519_ALG_ID;
-use encoding::Encodable;
-use error::Error;
+use crate::{algorithm::ED25519_ALG_ID, encoding::Encodable, error::Error};
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
 mod ed25519;

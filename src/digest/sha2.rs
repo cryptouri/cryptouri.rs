@@ -1,6 +1,6 @@
-use error::Error;
+//! SHA2 digest types
 
-use algorithm::SHA256_ALG_ID;
+use crate::{algorithm::SHA256_ALG_ID, error::Error};
 
 /// Size of a SHA-256 digest
 pub const SHA256_DIGEST_SIZE: usize = 32;

@@ -1,7 +1,7 @@
-use clear_on_drop::clear::Clear;
+//! Ed25519 signatures
 
-use algorithm::ED25519_ALG_ID;
-use error::Error;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
+use zeroize::Zeroize;
 
 /// Size of an Ed25519 signature
 pub const ED25519_SIGNATURE_SIZE: usize = 64;
@@ -37,7 +37,7 @@ impl AsRef<[u8]> for Ed25519Signature {
 // Signatures may be sensitive. Can't hurt (I hope!)
 impl Drop for Ed25519Signature {
     fn drop(&mut self) {
-        (&mut self.0[..]).clear()
+        (&mut self.0[..]).zeroize()
     }
 }
 

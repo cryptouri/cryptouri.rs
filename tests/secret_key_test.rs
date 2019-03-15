@@ -1,5 +1,3 @@
-extern crate cryptouri;
-
 macro_rules! secret_key_test {
     ($name:ident, $keytype:ident, $uri:expr, $dasherized:expr, $bytes:expr) => {
         mod $name {

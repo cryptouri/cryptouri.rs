@@ -1,11 +1,12 @@
-use encoding::Encodable;
-use error::Error;
+//! Digest types
+
+use crate::{encoding::Encodable, error::Error};
 
 /// NIST SHA-2 family of hash functions
 mod sha2;
 
 pub use self::sha2::Sha256Digest;
-use algorithm::SHA256_ALG_ID;
+use crate::algorithm::SHA256_ALG_ID;
 
 /// Digest (i.e. hash) algorithms
 pub enum Digest {

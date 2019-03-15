@@ -1,6 +1,6 @@
-use error::Error;
+//! Ed25519 public keys
 
-use algorithm::ED25519_ALG_ID;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
 
 /// Size of an Ed25519 public key
 pub const ED25519_PUBKEY_SIZE: usize = 32;
