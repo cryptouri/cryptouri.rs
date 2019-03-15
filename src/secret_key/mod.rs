@@ -1,6 +1,10 @@
-use crate::algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID};
-use crate::encoding::Encodable;
-use crate::error::Error;
+//! Secret Key types
+
+use crate::{
+    algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID},
+    encoding::Encodable,
+    error::Error,
+};
 
 /// Advanced Encryption Standard (AES - FIPS 197)
 mod aes;

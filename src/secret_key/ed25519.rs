@@ -1,8 +1,7 @@
 //! The Ed25519 digital signature algorithm
 
 use super::AsSecretSlice;
-use crate::algorithm::ED25519_ALG_ID;
-use crate::error::Error;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
 use zeroize::Zeroize;
 
 /// Size of an Ed25519 secret key

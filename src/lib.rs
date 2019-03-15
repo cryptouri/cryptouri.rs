@@ -3,7 +3,6 @@
 
 #![crate_name = "cryptouri"]
 #![crate_type = "rlib"]
-#![allow(unknown_lints, suspicious_arithmetic_impl)]
 #![deny(warnings, missing_docs, unused_import_braces, unused_qualifications)]
 #![forbid(unsafe_code)]
 #![doc(
@@ -11,14 +10,7 @@
     html_root_url = "https://docs.rs/cryptouri/0.0.1"
 )]
 
-extern crate failure;
-extern crate generic_array;
-extern crate subtle_encoding;
-extern crate zeroize;
-
-//
-// Modules with macros
-//
+use failure;
 
 /// Error types (defined first so macros are available)
 #[macro_use]
@@ -27,10 +19,6 @@ pub mod error;
 /// String encoding configuration
 #[macro_use]
 mod encoding;
-
-//
-// Modules without macros
-//
 
 /// Cryptographic algorithm registry
 pub mod algorithm;
@@ -47,15 +35,16 @@ pub mod secret_key;
 /// Signature types
 pub mod signature;
 
-pub use crate::encoding::Encodable;
-pub use crate::secret_key::AsSecretSlice;
+pub use crate::{encoding::Encodable, secret_key::AsSecretSlice};
 
-use crate::digest::Digest;
-use crate::encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING};
-use crate::error::Error;
-use crate::public_key::PublicKey;
-use crate::secret_key::SecretKey;
-use crate::signature::Signature;
+use crate::{
+    digest::Digest,
+    encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
+    error::Error,
+    public_key::PublicKey,
+    secret_key::SecretKey,
+    signature::Signature,
+};
 use subtle_encoding::bech32::{self, Bech32};
 use zeroize::Zeroize;
 

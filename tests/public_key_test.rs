@@ -1,5 +1,3 @@
-extern crate cryptouri;
-
 /// Ed25519 public key test
 ///
 /// Uses public key from RFC 8032 test vector: "TEST 1" secret key

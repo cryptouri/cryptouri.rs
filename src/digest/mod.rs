@@ -1,5 +1,6 @@
-use crate::encoding::Encodable;
-use crate::error::Error;
+//! Digest types
+
+use crate::{encoding::Encodable, error::Error};
 
 /// NIST SHA-2 family of hash functions
 mod sha2;
