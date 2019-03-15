@@ -11,8 +11,8 @@
 [docs-image]: https://docs.rs/cryptouri/badge.svg
 [docs-link]: https://docs.rs/cryptouri/
 [license-image]: https://img.shields.io/badge/license-MIT/Apache2.0-blue.svg
-[build-image]: https://circleci.com/gh/cryptouri/cryptouri-rs.svg?style=shield
-[build-link]: https://circleci.com/gh/cryptouri/cryptouri-rs
+[build-image]: https://travis-ci.org/cryptouri/cryptouri.rs.svg?branch=master
+[build-link]: https://travis-ci.org/cryptouri/cryptouri.rs
 [gitter-image]: https://badges.gitter.im/badge.svg
 [gitter-link]: https://gitter.im/cryptouri/Lobby
 
