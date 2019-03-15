@@ -1,3 +1,5 @@
+//! CryptoURI encoding support
+
 /// Characters to use when encoding CryptoUris
 pub(crate) struct Encoding {
     /// Scheme prefix for digests
@@ -55,18 +57,26 @@ macro_rules! impl_encodable {
         impl ::encoding::Encodable for $name {
             #[inline]
             fn to_uri_string(&self) -> String {
-                use iq_bech32::Bech32;
-                Bech32::new(::encoding::URI_ENCODING.delimiter).encode(
-                    ::encoding::URI_ENCODING.$scheme.to_owned() + $alg,
+                use subtle_encoding::bech32::{self, Bech32};
+                Bech32::new(
+                    bech32::DEFAULT_CHARSET,
+                    $crate::encoding::URI_ENCODING.delimiter,
+                )
+                .encode(
+                    $crate::encoding::URI_ENCODING.$scheme.to_owned() + $alg,
                     &self.0[..],
                 )
             }
 
             #[inline]
             fn to_dasherized_string(&self) -> String {
-                use iq_bech32::Bech32;
-                Bech32::new(::encoding::DASHERIZED_ENCODING.delimiter).encode(
-                    ::encoding::DASHERIZED_ENCODING.$scheme.to_owned() + $alg,
+                use subtle_encoding::bech32::{self, Bech32};
+                Bech32::new(
+                    bech32::DEFAULT_CHARSET,
+                    $crate::encoding::DASHERIZED_ENCODING.delimiter,
+                )
+                .encode(
+                    $crate::encoding::DASHERIZED_ENCODING.$scheme.to_owned() + $alg,
                     &self.0[..],
                 )
             }

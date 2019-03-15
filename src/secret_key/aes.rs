@@ -1,11 +1,13 @@
-use generic_array::{
-    typenum::{U16, U32},
-    ArrayLength, GenericArray,
-};
+//! Advanced Encryption Standard (AES) keys
 
 use super::AsSecretSlice;
 use algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID};
 use error::Error;
+use generic_array::{
+    typenum::{U16, U32},
+    ArrayLength, GenericArray,
+};
+use zeroize::Zeroize;
 
 pub struct AesGcmKey<Length>(GenericArray<u8, Length>)
 where
@@ -51,8 +53,7 @@ where
     Length: ArrayLength<u8>,
 {
     fn drop(&mut self) {
-        use clear_on_drop::clear::Clear;
-        self.0.as_mut().clear()
+        self.0.as_mut().zeroize()
     }
 }
 

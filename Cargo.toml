@@ -17,10 +17,7 @@ keywords    = ["bech32", "cryptography", "keys", "security", "uri"]
 circle-ci = { repository = "cryptouri/cryptouri-rs" }
 
 [dependencies]
-clear_on_drop = "0.2"
 failure = "0.1"
-generic-array = "0.11"
-iq-bech32 = "0"
-
-[features]
-nightly = ["clear_on_drop/nightly"]
+generic-array = "0.12"
+subtle-encoding = { version = "0.3", features = ["bech32-preview"] }
+zeroize = "0.5"
