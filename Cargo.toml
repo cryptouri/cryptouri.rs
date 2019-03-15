@@ -6,7 +6,7 @@ description = """
               """
 version     = "0.1.0" # Also update html_root_url in lib.rs when bumping this
 authors     = ["Tony Arcieri <bascule@gmail.com>"]
-license     = "MIT OR Apache-2.0"
+license     = "Apache-2.0 OR MIT"
 homepage    = "https://cryptouri.org"
 repository  = "https://github.com/cryptouri/cryptouri.rs/"
 readme      = "README.md"

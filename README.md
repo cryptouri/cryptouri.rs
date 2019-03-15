@@ -10,7 +10,7 @@
 [crate-link]: https://crates.io/crates/cryptouri
 [docs-image]: https://docs.rs/cryptouri/badge.svg
 [docs-link]: https://docs.rs/cryptouri/
-[license-image]: https://img.shields.io/badge/license-MIT/Apache2.0-blue.svg
+[license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
 [build-image]: https://travis-ci.org/cryptouri/cryptouri.rs.svg?branch=master
 [build-link]: https://travis-ci.org/cryptouri/cryptouri.rs
 [gitter-image]: https://badges.gitter.im/badge.svg
