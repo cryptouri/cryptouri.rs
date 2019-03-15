@@ -1,7 +1,7 @@
 //! Ed25519 signatures
 
-use algorithm::ED25519_ALG_ID;
-use error::Error;
+use crate::algorithm::ED25519_ALG_ID;
+use crate::error::Error;
 use zeroize::Zeroize;
 
 /// Size of an Ed25519 signature

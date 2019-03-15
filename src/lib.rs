@@ -47,15 +47,15 @@ pub mod secret_key;
 /// Signature types
 pub mod signature;
 
-pub use encoding::Encodable;
-pub use secret_key::AsSecretSlice;
+pub use crate::encoding::Encodable;
+pub use crate::secret_key::AsSecretSlice;
 
-use digest::Digest;
-use encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING};
-use error::Error;
-use public_key::PublicKey;
-use secret_key::SecretKey;
-use signature::Signature;
+use crate::digest::Digest;
+use crate::encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING};
+use crate::error::Error;
+use crate::public_key::PublicKey;
+use crate::secret_key::SecretKey;
+use crate::signature::Signature;
 use subtle_encoding::bech32::{self, Bech32};
 use zeroize::Zeroize;
 

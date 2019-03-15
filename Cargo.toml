@@ -10,6 +10,7 @@ license     = "MIT OR Apache-2.0"
 homepage    = "https://cryptouri.org"
 repository  = "https://github.com/cryptouri/cryptouri-rs/"
 readme      = "README.md"
+edition     = "2018"
 categories  = ["cryptography", "encoding"]
 keywords    = ["bech32", "cryptography", "keys", "security", "uri"]
 

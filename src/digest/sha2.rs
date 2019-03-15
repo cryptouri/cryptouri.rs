@@ -1,6 +1,6 @@
-use error::Error;
+use crate::error::Error;
 
-use algorithm::SHA256_ALG_ID;
+use crate::algorithm::SHA256_ALG_ID;
 
 /// Size of a SHA-256 digest
 pub const SHA256_DIGEST_SIZE: usize = 32;

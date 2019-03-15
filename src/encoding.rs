@@ -54,7 +54,7 @@ pub trait Encodable {
 
 macro_rules! impl_encodable {
     ($scheme:ident, $name:ident, $alg:expr) => {
-        impl ::encoding::Encodable for $name {
+        impl crate::encoding::Encodable for $name {
             #[inline]
             fn to_uri_string(&self) -> String {
                 use subtle_encoding::bech32::{self, Bech32};

@@ -1,8 +1,8 @@
 //! Advanced Encryption Standard (AES) keys
 
 use super::AsSecretSlice;
-use algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID};
-use error::Error;
+use crate::algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID};
+use crate::error::Error;
 use generic_array::{
     typenum::{U16, U32},
     ArrayLength, GenericArray,
