@@ -11,7 +11,7 @@
 [docs-image]: https://docs.rs/cryptouri/badge.svg
 [docs-link]: https://docs.rs/cryptouri/
 [license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
-[build-image]: https://travis-ci.org/cryptouri/cryptouri.rs.svg?branch=master
+[build-image]: https://travis-ci.org/cryptouri/cryptouri.rs.svg?branch=develop
 [build-link]: https://travis-ci.org/cryptouri/cryptouri.rs
 [gitter-image]: https://badges.gitter.im/badge.svg
 [gitter-link]: https://gitter.im/cryptouri/Lobby
@@ -81,7 +81,7 @@ at your option.
 
 [Bech32]: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
 [cc]: https://contributor-covenant.org
-[CODE_OF_CONDUCT.md]: https://github.com/cryptouri/cryptouri-rs/blob/master/CODE_OF_CONDUCT.md
+[CODE_OF_CONDUCT.md]: https://github.com/cryptouri/cryptouri-rs/blob/develop/CODE_OF_CONDUCT.md
 [RFC 3986]: https://tools.ietf.org/html/rfc3986
-[LICENSE-APACHE]: https://github.com/cryptouri/cryptouri-rs/blob/master/LICENSE-APACHE
-[LICENSE-MIT]: https://github.com/cryptouri/cryptouri-rs/blob/master/LICENSE-MIT
+[LICENSE-APACHE]: https://github.com/cryptouri/cryptouri-rs/blob/develop/LICENSE-APACHE
+[LICENSE-MIT]: https://github.com/cryptouri/cryptouri-rs/blob/develop/LICENSE-MIT
