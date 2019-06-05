@@ -8,6 +8,8 @@ use zeroize::Zeroize;
 pub const ED25519_SECKEY_SIZE: usize = 32;
 
 /// Ed25519 secret key (i.e. compressed Edwards-y coordinate)
+#[derive(Zeroize)]
+#[zeroize(drop)]
 pub struct Ed25519SecretKey([u8; ED25519_SECKEY_SIZE]);
 
 impl Ed25519SecretKey {
@@ -38,12 +40,6 @@ impl Ed25519SecretKey {
 impl AsSecretSlice for Ed25519SecretKey {
     fn as_secret_slice(&self) -> &[u8] {
         self.0.as_ref()
-    }
-}
-
-impl Drop for Ed25519SecretKey {
-    fn drop(&mut self) {
-        self.0.as_mut().zeroize()
     }
 }
 

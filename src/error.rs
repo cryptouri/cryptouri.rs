@@ -1,3 +1,5 @@
+//! Error types
+
 use failure::{Backtrace, Context, Fail};
 use std::fmt::{self, Display};
 

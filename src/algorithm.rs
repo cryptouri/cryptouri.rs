@@ -1,3 +1,5 @@
+//! Cryptographic algorithm registry
+
 //
 // Digest algorithms
 //
