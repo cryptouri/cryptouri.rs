@@ -10,29 +10,16 @@
     html_root_url = "https://docs.rs/cryptouri/0.1.0"
 )]
 
-use failure;
-
-/// Error types (defined first so macros are available)
+#[macro_use]
+mod encoding;
 #[macro_use]
 pub mod error;
 
-/// String encoding configuration
-#[macro_use]
-mod encoding;
-
-/// Cryptographic algorithm registry
 pub mod algorithm;
-
-/// Digest algorithms (i.e. hash functions) for key digests
 pub mod digest;
-
-/// Public key types
+mod parts;
 pub mod public_key;
-
-/// Secret key types
 pub mod secret_key;
-
-/// Signature types
 pub mod signature;
 
 pub use crate::{encoding::Encodable, secret_key::AsSecretSlice};
@@ -41,12 +28,11 @@ use crate::{
     digest::Digest,
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
     error::Error,
+    parts::Parts,
     public_key::PublicKey,
     secret_key::SecretKey,
     signature::Signature,
 };
-use subtle_encoding::bech32::{self, Bech32};
-use zeroize::Zeroize;
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects
 pub struct CryptoUri {
@@ -76,32 +62,36 @@ impl CryptoUri {
     /// Parse a `CryptoUri` from a Bech32 encoded string using the given encoding
     // TODO: parser generator rather than handrolling this?
     fn parse(uri: &str, encoding: &Encoding) -> Result<Self, Error> {
-        let (prefix, mut data, fragment) = decode(uri, encoding)?;
+        let parts = Parts::decode(uri, encoding)?;
 
-        let kind = if prefix.starts_with(encoding.digest_scheme) {
-            CryptoUriKind::Digest(Digest::new(&prefix[encoding.digest_scheme.len()..], &data)?)
-        } else if prefix.starts_with(encoding.public_key_scheme) {
+        let kind = if parts.prefix.starts_with(encoding.digest_scheme) {
+            CryptoUriKind::Digest(Digest::new(
+                &parts.prefix[encoding.digest_scheme.len()..],
+                &parts.data,
+            )?)
+        } else if parts.prefix.starts_with(encoding.public_key_scheme) {
             CryptoUriKind::PublicKey(PublicKey::new(
-                &prefix[encoding.public_key_scheme.len()..],
-                &data,
+                &parts.prefix[encoding.public_key_scheme.len()..],
+                &parts.data,
             )?)
-        } else if prefix.starts_with(encoding.secret_key_scheme) {
+        } else if parts.prefix.starts_with(encoding.secret_key_scheme) {
             CryptoUriKind::SecretKey(SecretKey::new(
-                &prefix[encoding.secret_key_scheme.len()..],
-                &data,
+                &parts.prefix[encoding.secret_key_scheme.len()..],
+                &parts.data,
             )?)
-        } else if prefix.starts_with(encoding.signature_scheme) {
+        } else if parts.prefix.starts_with(encoding.signature_scheme) {
             CryptoUriKind::Signature(Signature::new(
-                &prefix[encoding.signature_scheme.len()..],
-                &data,
+                &parts.prefix[encoding.signature_scheme.len()..],
+                &parts.data,
             )?)
         } else {
-            fail!(SchemeInvalid, "unknown CryptoURI prefix: {}", prefix)
+            fail!(SchemeInvalid, "unknown CryptoURI prefix: {}", parts.prefix)
         };
 
-        data.as_mut_slice().zeroize();
-
-        Ok(Self { kind, fragment })
+        Ok(Self {
+            kind,
+            fragment: parts.fragment.clone(),
+        })
     }
 
     /// Parse a `CryptoUri`
@@ -197,21 +187,4 @@ impl Encodable for CryptoUri {
             CryptoUriKind::Signature(ref sig) => sig.to_dasherized_string(),
         }
     }
-}
-
-/// Decode a URI into its prefix (scheme + algorithm), data, and fragment
-fn decode(uri: &str, encoding: &Encoding) -> Result<(String, Vec<u8>, Option<String>), Error> {
-    // Extract the fragment if it exists. Note that fragment is not covered by the
-    // bech32 checksum and can be modified (e.g. as a key description)
-    if let Some(delimiter) = encoding.fragment_delimiter {
-        if let Some(pos) = uri.find(delimiter) {
-            let fragment = uri[(pos + 1)..].to_owned();
-            let (prefix, data) =
-                Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(&uri[..pos])?;
-            return Ok((prefix, data, Some(fragment)));
-        }
-    }
-
-    let (prefix, data) = Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(uri)?;
-    Ok((prefix, data, None))
 }
