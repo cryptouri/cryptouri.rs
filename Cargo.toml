@@ -21,4 +21,4 @@ travis-ci = { repository = "cryptouri/cryptouri.rs" }
 failure = "0.1"
 generic-array = "0.13"
 subtle-encoding = { version = "0.4", features = ["bech32-preview"] }
-zeroize = "0.9.1"
+zeroize = "0.10.0"
