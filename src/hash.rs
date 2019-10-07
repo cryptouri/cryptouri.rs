@@ -1,6 +1,9 @@
 //! Digest types
 
-use crate::{encoding::Encodable, error::Error};
+use crate::{
+    encoding::Encodable,
+    error::{Error, ErrorKind},
+};
 
 /// NIST SHA-2 family of hash functions
 mod sha2;
@@ -19,7 +22,7 @@ impl Hash {
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
         let result = match alg {
             SHA256_ALG_ID => Hash::Sha256(Sha256Hash::new(bytes)?),
-            _ => fail!(AlgorithmInvalid, "{}", alg),
+            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 
         Ok(result)

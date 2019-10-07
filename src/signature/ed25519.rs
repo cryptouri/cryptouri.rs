@@ -1,6 +1,9 @@
 //! Ed25519 signatures
 
-use crate::{algorithm::ED25519_ALG_ID, error::Error};
+use crate::{
+    algorithm::ED25519_ALG_ID,
+    error::{Error, ErrorKind},
+};
 use zeroize::Zeroize;
 
 /// Size of an Ed25519 signature
@@ -14,7 +17,7 @@ impl Ed25519Signature {
     pub fn new(slice: &[u8]) -> Result<Self, Error> {
         if slice.len() != ED25519_SIGNATURE_SIZE {
             fail!(
-                ParseError,
+                ErrorKind::ParseError,
                 "bad Ed25519 signature length: {} (expected {})",
                 slice.len(),
                 ED25519_SIGNATURE_SIZE

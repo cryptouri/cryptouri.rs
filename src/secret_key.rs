@@ -3,7 +3,7 @@
 use crate::{
     algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID},
     encoding::Encodable,
-    error::Error,
+    error::{Error, ErrorKind},
 };
 
 /// Advanced Encryption Standard (AES - FIPS 197)
@@ -34,7 +34,7 @@ impl SecretKey {
             AES128GCM_ALG_ID => SecretKey::Aes128Gcm(Aes128GcmKey::from_slice(slice)?),
             AES256GCM_ALG_ID => SecretKey::Aes256Gcm(Aes256GcmKey::from_slice(slice)?),
             ED25519_ALG_ID => SecretKey::Ed25519(Ed25519SecretKey::from_slice(slice)?),
-            _ => fail!(AlgorithmInvalid, "{}", alg),
+            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 
         Ok(result)

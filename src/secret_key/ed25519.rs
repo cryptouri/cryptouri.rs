@@ -1,7 +1,10 @@
 //! The Ed25519 digital signature algorithm
 
 use super::AsSecretSlice;
-use crate::{algorithm::ED25519_ALG_ID, error::Error};
+use crate::{
+    algorithm::ED25519_ALG_ID,
+    error::{Error, ErrorKind},
+};
 use zeroize::Zeroize;
 
 /// Size of an Ed25519 secret key
@@ -23,7 +26,7 @@ impl Ed25519SecretKey {
     pub fn from_slice(slice: &[u8]) -> Result<Self, Error> {
         if slice.len() != ED25519_SECKEY_SIZE {
             fail!(
-                ParseError,
+                ErrorKind::ParseError,
                 "bad Ed25519 secret key length: {} (expected {})",
                 slice.len(),
                 ED25519_SECKEY_SIZE
