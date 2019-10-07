@@ -5,7 +5,7 @@
 #![forbid(unsafe_code)]
 #![doc(
     html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff",
-    html_root_url = "https://docs.rs/cryptouri/0.1.1"
+    html_root_url = "https://docs.rs/cryptouri/0.2.0"
 )]
 
 #[macro_use]
