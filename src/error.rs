@@ -1,128 +1,108 @@
 //! Error types
 
-use failure::{Backtrace, Context, Fail};
 use std::fmt::{self, Display};
 
 /// Error type
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Error {
-    /// Contextual information about the error
-    inner: Context<ErrorKind>,
+    /// Kind of error
+    kind: ErrorKind,
 
     /// Optional description message
-    description: Option<String>,
+    msg: Option<String>,
 }
 
 impl Error {
     /// Create a new error
-    pub fn new(kind: ErrorKind) -> Self {
-        Self {
-            inner: Context::new(kind),
-            description: None,
-        }
+    pub fn new(kind: ErrorKind, msg: Option<String>) -> Self {
+        Self { kind, msg }
     }
 
-    /// Create a new error with the given description
-    pub fn with_description(kind: ErrorKind, description: String) -> Self {
-        Self {
-            inner: Context::new(kind),
-            description: Some(description),
-        }
-    }
-
-    /// Obtain the inner `ErrorKind` for this error
-    #[allow(dead_code)]
+    /// Obtain the `ErrorKind` for this error
     pub fn kind(&self) -> ErrorKind {
-        *self.inner.get_context()
-    }
-}
-
-impl Fail for Error {
-    fn cause(&self) -> Option<&dyn Fail> {
-        self.inner.cause()
-    }
-
-    fn backtrace(&self) -> Option<&Backtrace> {
-        self.inner.backtrace()
+        self.kind
     }
 }
 
 impl From<ErrorKind> for Error {
     fn from(kind: ErrorKind) -> Self {
-        Self::new(kind)
-    }
-}
-
-impl From<Context<ErrorKind>> for Error {
-    fn from(inner: Context<ErrorKind>) -> Self {
-        Self {
-            inner,
-            description: None,
-        }
+        Self::new(kind, None)
     }
 }
 
 impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self.description {
-            Some(ref desc) => write!(f, "{}: {}", &self.inner, desc),
-            None => Display::fmt(&self.inner, f),
+        match self.msg {
+            Some(ref msg) => write!(f, "{}: {}", &self.kind, msg),
+            None => write!(f, "{}", self.kind),
         }
     }
 }
 
 impl From<subtle_encoding::Error> for Error {
-    fn from(_err: subtle_encoding::Error) -> Error {
-        panic!("unimplemented");
+    fn from(err: subtle_encoding::Error) -> Error {
+        match err {
+            subtle_encoding::Error::ChecksumInvalid => ErrorKind::ChecksumInvalid,
+            _ => ErrorKind::ParseError,
+        }
+        .into()
     }
 }
 
+impl std::error::Error for Error {}
+
 /// Kinds of errors
-#[derive(Copy, Clone, Eq, PartialEq, Debug, Fail)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum ErrorKind {
     /// Unknown or unsupported algorithm
-    #[fail(display = "unknown or unsupported algorithm")]
     AlgorithmInvalid,
 
     /// Checksum error
-    #[fail(display = "checksum error")]
     ChecksumInvalid,
 
-    /// Failure to decode bech32 data
-    #[fail(display = "decode error")]
-    DecodeError,
-
     /// Error parsing CryptoUri syntax
-    #[fail(display = "invalid key")]
     ParseError,
 
     /// Unknown CryptoUri scheme
-    #[fail(display = "unknown scheme")]
     SchemeInvalid,
 }
 
+impl ErrorKind {
+    /// Get a description of this error
+    pub fn description(self) -> &'static str {
+        match self {
+            ErrorKind::AlgorithmInvalid => "unknown or unsupported algorithm",
+            ErrorKind::ChecksumInvalid => "checksum error",
+            ErrorKind::ParseError => "parse error",
+            ErrorKind::SchemeInvalid => "unknown URI scheme",
+        }
+    }
+}
+
+impl Display for ErrorKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+
+impl std::error::Error for ErrorKind {}
+
 /// Create a new error (of a given enum variant) with a formatted message
 macro_rules! err {
-    ($kind:ident, $msg:expr) => {
-        crate::error::Error::with_description(
-            crate::error::ErrorKind::$kind,
-            $msg.to_string()
-        )
+    ($kind:path, $msg:expr) => {
+        crate::error::Error::new($kind, Some($msg.to_string()))
     };
-    ($kind:ident, $fmt:expr, $($arg:tt)+) => {
-        crate::error::Error::with_description(
-            crate::error::ErrorKind::$kind,
-            format!($fmt, $($arg)+)
-        )
+    ($kind:path, $fmt:expr, $($arg:tt)+) => {
+        err!($kind, format!($fmt, $($arg)+))
     };
 }
 
 /// Create and return an error with a formatted message
 macro_rules! fail {
-    ($kind:ident, $msg:expr) => {
+    ($kind:path, $msg:expr) => {
         return Err(err!($kind, $msg).into());
     };
-    ($kind:ident, $fmt:expr, $($arg:tt)+) => {
-        return Err(err!($kind, $fmt, $($arg)+).into());
+    ($kind:path, $fmt:expr, $($arg:tt)+) => {
+        fail!($kind, format!($fmt, $($arg)+));
     };
 }

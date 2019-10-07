@@ -3,7 +3,7 @@
 use super::AsSecretSlice;
 use crate::{
     algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID},
-    error::Error,
+    error::{Error, ErrorKind},
 };
 use generic_array::{
     typenum::{U16, U32},
@@ -29,7 +29,7 @@ where
     pub fn from_slice(slice: &[u8]) -> Result<Self, Error> {
         if slice.len() != Length::to_usize() {
             fail!(
-                ParseError,
+                ErrorKind::ParseError,
                 "bad AES-{} key length: {} (expected {})",
                 Length::to_usize() * 8,
                 slice.len(),

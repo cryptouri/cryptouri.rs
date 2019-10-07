@@ -1,6 +1,10 @@
 //! Public key types
 
-use crate::{algorithm::ED25519_ALG_ID, encoding::Encodable, error::Error};
+use crate::{
+    algorithm::ED25519_ALG_ID,
+    encoding::Encodable,
+    error::{Error, ErrorKind},
+};
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
 mod ed25519;
@@ -18,7 +22,7 @@ impl PublicKey {
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
         let result = match alg {
             ED25519_ALG_ID => PublicKey::Ed25519(Ed25519PublicKey::new(bytes)?),
-            _ => fail!(AlgorithmInvalid, "{}", alg),
+            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 
         Ok(result)

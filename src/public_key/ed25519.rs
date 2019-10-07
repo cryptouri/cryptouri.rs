@@ -1,6 +1,9 @@
 //! Ed25519 public keys
 
-use crate::{algorithm::ED25519_ALG_ID, error::Error};
+use crate::{
+    algorithm::ED25519_ALG_ID,
+    error::{Error, ErrorKind},
+};
 
 /// Size of an Ed25519 public key
 pub const ED25519_PUBKEY_SIZE: usize = 32;
@@ -13,7 +16,7 @@ impl Ed25519PublicKey {
     pub fn new(slice: &[u8]) -> Result<Self, Error> {
         if slice.len() != ED25519_PUBKEY_SIZE {
             fail!(
-                ParseError,
+                ErrorKind::ParseError,
                 "bad Ed25519 public key length: {} (expected {})",
                 slice.len(),
                 ED25519_PUBKEY_SIZE

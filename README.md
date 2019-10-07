@@ -20,13 +20,13 @@ A URI-like format for serializing cryptographic objects including keys,
 signatures, and digests using URI generic syntax:
 
 ```
-crypto:public:key:ed25519:6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydq3pkr2c
+crypto:pub:key:ed25519:6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqf03cvv
 ```
 
 A URI-safe "dasherized" form is also supported:
 
 ```
-crypto-public-key-ed25519-6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqc3p98e
+crypto-pub-key-ed25519-6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqlu986g
 ```
 
 [Documentation][docs-link]

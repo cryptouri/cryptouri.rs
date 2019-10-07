@@ -1,6 +1,9 @@
 //! SHA2 hash types
 
-use crate::{algorithm::SHA256_ALG_ID, error::Error};
+use crate::{
+    algorithm::SHA256_ALG_ID,
+    error::{Error, ErrorKind},
+};
 
 /// Size of a SHA-256 hash
 pub const SHA256_HASH_SIZE: usize = 32;
@@ -13,7 +16,7 @@ impl Sha256Hash {
     pub fn new(slice: &[u8]) -> Result<Self, Error> {
         if slice.len() != SHA256_HASH_SIZE {
             fail!(
-                ParseError,
+                ErrorKind::ParseError,
                 "bad SHA-256 hash length: {} (expected {})",
                 slice.len(),
                 SHA256_HASH_SIZE

@@ -24,7 +24,7 @@ pub use crate::{encoding::Encodable, secret_key::AsSecretSlice};
 
 use crate::{
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
-    error::Error,
+    error::{Error, ErrorKind},
     hash::Hash,
     parts::Parts,
     public_key::PublicKey,
@@ -83,7 +83,11 @@ impl CryptoUri {
                 &parts.data,
             )?)
         } else {
-            fail!(SchemeInvalid, "unknown CryptoURI prefix: {}", parts.prefix)
+            fail!(
+                ErrorKind::SchemeInvalid,
+                "unknown CryptoURI prefix: {}",
+                parts.prefix
+            )
         };
 
         Ok(Self {
