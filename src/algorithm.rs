@@ -1,7 +1,7 @@
 //! Cryptographic algorithm registry
 
 //
-// Digest algorithms
+// Hash algorithms
 //
 
 /// NIST SHA-256 digest algorithm (FIPS 180-4)

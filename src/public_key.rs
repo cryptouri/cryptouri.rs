@@ -27,7 +27,7 @@ impl PublicKey {
     /// Return an `Ed25519PublicKey` if the underlying public key is Ed25519
     pub fn ed25519_key(&self) -> Option<&Ed25519PublicKey> {
         match self {
-            PublicKey::Ed25519(ref digest) => Some(digest),
+            PublicKey::Ed25519(ref key) => Some(key),
         }
     }
 

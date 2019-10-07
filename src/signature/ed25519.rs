@@ -21,10 +21,10 @@ impl Ed25519Signature {
             );
         }
 
-        let mut digest_bytes = [0u8; ED25519_SIGNATURE_SIZE];
-        digest_bytes.copy_from_slice(slice);
+        let mut sig_bytes = [0u8; ED25519_SIGNATURE_SIZE];
+        sig_bytes.copy_from_slice(slice);
 
-        Ok(Ed25519Signature(digest_bytes))
+        Ok(Ed25519Signature(sig_bytes))
     }
 }
 

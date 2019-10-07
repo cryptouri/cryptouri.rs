@@ -5,20 +5,20 @@ use crate::{encoding::Encodable, error::Error};
 /// NIST SHA-2 family of hash functions
 mod sha2;
 
-pub use self::sha2::Sha256Digest;
+pub use self::sha2::Sha256Hash;
 use crate::algorithm::SHA256_ALG_ID;
 
 /// Digest (i.e. hash) algorithms
-pub enum Digest {
+pub enum Hash {
     /// NIST SHA-2 with a 256-bit digest
-    Sha256(Sha256Digest),
+    Sha256(Sha256Hash),
 }
 
-impl Digest {
+impl Hash {
     /// Create a new `Digest` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
         let result = match alg {
-            SHA256_ALG_ID => Digest::Sha256(Sha256Digest::new(bytes)?),
+            SHA256_ALG_ID => Hash::Sha256(Sha256Hash::new(bytes)?),
             _ => fail!(AlgorithmInvalid, "{}", alg),
         };
 
@@ -26,9 +26,9 @@ impl Digest {
     }
 
     /// Return a `Sha256Digest` if the underlying digest is SHA-256
-    pub fn sha256_digest(&self) -> Option<&Sha256Digest> {
+    pub fn sha256_digest(&self) -> Option<&Sha256Hash> {
         match self {
-            Digest::Sha256(ref digest) => Some(digest),
+            Hash::Sha256(ref digest) => Some(digest),
         }
     }
 
@@ -38,18 +38,18 @@ impl Digest {
     }
 }
 
-impl Encodable for Digest {
+impl Encodable for Hash {
     /// Serialize this `Digest` as a URI-encoded `String`
     fn to_uri_string(&self) -> String {
         match self {
-            Digest::Sha256(ref digest) => digest.to_uri_string(),
+            Hash::Sha256(ref digest) => digest.to_uri_string(),
         }
     }
 
     /// Serialize this `Digest` as a "dasherized" `String`
     fn to_dasherized_string(&self) -> String {
         match self {
-            Digest::Sha256(ref digest) => digest.to_dasherized_string(),
+            Hash::Sha256(ref digest) => digest.to_dasherized_string(),
         }
     }
 }
