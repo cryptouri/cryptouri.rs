@@ -69,7 +69,7 @@ impl SecretKey {
     /// Return an `Ed25519SecretKey` if the underlying secret key is Ed25519
     pub fn ed25519_key(&self) -> Option<&Ed25519SecretKey> {
         match self {
-            SecretKey::Ed25519(ref digest) => Some(digest),
+            SecretKey::Ed25519(ref key) => Some(key),
             _ => None,
         }
     }

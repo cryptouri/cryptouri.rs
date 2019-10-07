@@ -7,10 +7,10 @@ mod ed25519 {
     use cryptouri::{CryptoUri, Encodable};
 
     const EXAMPLE_URI: &str =
-        "crypto:public:key:ed25519:6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydq3pkr2c";
+        "crypto:pub:key:ed25519:6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqf03cvv";
 
     const EXAMPLE_DASHERIZED: &str =
-        "crypto-public-key-ed25519-6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqc3p98e";
+        "crypto-pub-key-ed25519-6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqlu986g";
 
     const EXAMPLE_BYTES: &[u8] = &[
         215, 90, 152, 1, 130, 177, 10, 183, 213, 75, 254, 211, 201, 100, 7, 58, 14, 225, 114, 243,

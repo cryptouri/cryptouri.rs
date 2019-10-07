@@ -2,8 +2,8 @@
 
 /// Characters to use when encoding CryptoUris
 pub(crate) struct Encoding {
-    /// Scheme prefix for digests
-    pub digest_scheme: &'static str,
+    /// Scheme prefix for hashes
+    pub hash_scheme: &'static str,
 
     /// Scheme prefix for public keys
     pub public_key_scheme: &'static str,
@@ -25,20 +25,20 @@ pub(crate) struct Encoding {
 
 /// Normal URI encoding
 pub(crate) const URI_ENCODING: &Encoding = &Encoding {
-    digest_scheme: "crypto:public:digest:",
-    public_key_scheme: "crypto:public:key:",
-    secret_key_scheme: "crypto:secret:key:",
-    signature_scheme: "crypto:public:signature:",
+    hash_scheme: "crypto:hash:",
+    public_key_scheme: "crypto:pub:key:",
+    secret_key_scheme: "crypto:sec:key:",
+    signature_scheme: "crypto:sig:",
     delimiter: ':',
     fragment_delimiter: Some('#'),
 };
 
 /// URI-embeddable (a.k.a. "dasherized") encoding
 pub(crate) const DASHERIZED_ENCODING: &Encoding = &Encoding {
-    digest_scheme: "crypto-public-digest-",
-    public_key_scheme: "crypto-public-key-",
-    secret_key_scheme: "crypto-secret-key-",
-    signature_scheme: "crypto-public-signature-",
+    hash_scheme: "crypto-hash-",
+    public_key_scheme: "crypto-pub-key-",
+    secret_key_scheme: "crypto-sec-key-",
+    signature_scheme: "crypto-sig-",
     delimiter: '-',
     fragment_delimiter: None,
 };
@@ -84,9 +84,9 @@ macro_rules! impl_encodable {
     };
 }
 
-macro_rules! impl_encodable_digest {
+macro_rules! impl_encodable_hash {
     ($name:ident, $alg:expr) => {
-        impl_encodable!(digest_scheme, $name, $alg);
+        impl_encodable!(hash_scheme, $name, $alg);
     };
 }
 

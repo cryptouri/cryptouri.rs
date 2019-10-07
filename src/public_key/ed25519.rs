@@ -20,10 +20,10 @@ impl Ed25519PublicKey {
             );
         }
 
-        let mut digest_bytes = [0u8; ED25519_PUBKEY_SIZE];
-        digest_bytes.copy_from_slice(slice);
+        let mut key_bytes = [0u8; ED25519_PUBKEY_SIZE];
+        key_bytes.copy_from_slice(slice);
 
-        Ok(Ed25519PublicKey(digest_bytes))
+        Ok(Ed25519PublicKey(key_bytes))
     }
 }
 
