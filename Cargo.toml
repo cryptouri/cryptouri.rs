@@ -20,4 +20,4 @@ travis-ci = { repository = "cryptouri/cryptouri.rs" }
 [dependencies]
 generic-array = "0.13"
 subtle-encoding = { version = "0.5", features = ["bech32-preview"] }
-zeroize = { version = "1.0.0-pre", features = ["zeroize_derive"] }
+zeroize = { version = "1", features = ["zeroize_derive"] }
