@@ -1,19 +1,23 @@
 //! Secret Key types
 
-use crate::{
-    algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID},
-    encoding::Encodable,
-    error::{Error, ErrorKind},
-};
-
 /// Advanced Encryption Standard (AES - FIPS 197)
 mod aes;
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
 mod ed25519;
 
-pub use self::aes::{Aes128GcmKey, Aes256GcmKey};
-pub use self::ed25519::Ed25519SecretKey;
+pub use self::{
+    aes::{Aes128GcmKey, Aes256GcmKey},
+    ed25519::Ed25519SecretKey,
+};
+pub use secrecy::ExposeSecret;
+use std::convert::TryInto;
+
+use crate::{
+    algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID},
+    encoding::Encodable,
+    error::{Error, ErrorKind},
+};
 
 /// Secret key algorithms
 pub enum SecretKey {
@@ -31,9 +35,9 @@ impl SecretKey {
     /// Create a new `SecretKey` for the given algorithm
     pub fn new(alg: &str, slice: &[u8]) -> Result<Self, Error> {
         let result = match alg {
-            AES128GCM_ALG_ID => SecretKey::Aes128Gcm(Aes128GcmKey::from_slice(slice)?),
-            AES256GCM_ALG_ID => SecretKey::Aes256Gcm(Aes256GcmKey::from_slice(slice)?),
-            ED25519_ALG_ID => SecretKey::Ed25519(Ed25519SecretKey::from_slice(slice)?),
+            AES128GCM_ALG_ID => SecretKey::Aes128Gcm(slice.try_into()?),
+            AES256GCM_ALG_ID => SecretKey::Aes256Gcm(slice.try_into()?),
+            ED25519_ALG_ID => SecretKey::Ed25519(slice.try_into()?),
             _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 
@@ -98,11 +102,4 @@ impl Encodable for SecretKey {
             SecretKey::Ed25519(ref key) => key.to_dasherized_string(),
         }
     }
-}
-
-/// Access to secrets/raw key material as a byte slice. We use a special trait
-/// for this to avoid accidental leakage of key material (via e.g. `AsRef`)
-pub trait AsSecretSlice {
-    /// Expose secret data as a byte slice. Treat it with care!
-    fn as_secret_slice(&self) -> &[u8];
 }

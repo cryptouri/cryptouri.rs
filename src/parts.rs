@@ -1,21 +1,19 @@
 //! CryptoURI parts
 
 use crate::{encoding::Encoding, error::Error};
+use secrecy::{Secret, SecretString, SecretVec};
 use subtle_encoding::bech32::{self, Bech32};
-use zeroize::Zeroize;
 
 /// Parts of a CryptoURI
-#[derive(Zeroize)]
-#[zeroize(drop)]
 pub(crate) struct Parts {
     /// CryptoURI prefix
     pub(crate) prefix: String,
 
     /// Data (i.e. public or private key or key fingerprint)
-    pub(crate) data: Vec<u8>,
+    pub(crate) data: SecretVec<u8>,
 
     /// URI fragment (i.e. comment)
-    pub(crate) fragment: Option<String>,
+    pub(crate) fragment: Option<SecretString>,
 }
 
 impl Parts {
@@ -28,19 +26,21 @@ impl Parts {
                 let fragment = uri[(pos + 1)..].to_owned();
                 let (prefix, data) =
                     Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(&uri[..pos])?;
+
                 return Ok(Self {
                     prefix,
-                    data,
-                    fragment: Some(fragment),
+                    data: Secret::new(data),
+                    fragment: Some(Secret::new(fragment)),
                 });
             }
         }
 
         let (prefix, data) =
             Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(uri)?;
+
         Ok(Self {
             prefix,
-            data,
+            data: Secret::new(data),
             fragment: None,
         })
     }

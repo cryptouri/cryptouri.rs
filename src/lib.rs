@@ -25,7 +25,6 @@ pub use crate::{
     error::{Error, ErrorKind},
     hash::Hash,
     public_key::PublicKey,
-    secret_key::AsSecretSlice,
     secret_key::SecretKey,
     signature::Signature,
 };
@@ -34,6 +33,7 @@ use crate::{
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
     parts::Parts,
 };
+use secrecy::{ExposeSecret, SecretString};
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects
 pub struct CryptoUri {
@@ -41,7 +41,7 @@ pub struct CryptoUri {
     kind: CryptoUriKind,
 
     /// URI fragment (i.e. everything after `#`)
-    fragment: Option<String>,
+    fragment: Option<SecretString>,
 }
 
 /// Kinds of `CryptoUri`s
@@ -68,22 +68,22 @@ impl CryptoUri {
         let kind = if parts.prefix.starts_with(encoding.hash_scheme) {
             CryptoUriKind::Hash(Hash::new(
                 &parts.prefix[encoding.hash_scheme.len()..],
-                &parts.data,
+                parts.data.expose_secret(),
             )?)
         } else if parts.prefix.starts_with(encoding.public_key_scheme) {
             CryptoUriKind::PublicKey(PublicKey::new(
                 &parts.prefix[encoding.public_key_scheme.len()..],
-                &parts.data,
+                parts.data.expose_secret(),
             )?)
         } else if parts.prefix.starts_with(encoding.secret_key_scheme) {
             CryptoUriKind::SecretKey(SecretKey::new(
                 &parts.prefix[encoding.secret_key_scheme.len()..],
-                &parts.data,
+                parts.data.expose_secret(),
             )?)
         } else if parts.prefix.starts_with(encoding.signature_scheme) {
             CryptoUriKind::Signature(Signature::new(
                 &parts.prefix[encoding.signature_scheme.len()..],
-                &parts.data,
+                parts.data.expose_secret(),
             )?)
         } else {
             fail!(
@@ -95,7 +95,7 @@ impl CryptoUri {
 
         Ok(Self {
             kind,
-            fragment: parts.fragment.clone(),
+            fragment: parts.fragment,
         })
     }
 
@@ -168,7 +168,9 @@ impl CryptoUri {
 
     /// Obtain the fragment for this URI (i.e. everything after `#`)
     pub fn fragment(&self) -> Option<&str> {
-        self.fragment.as_ref().map(|f| f.as_ref())
+        self.fragment
+            .as_ref()
+            .map(|fragment| fragment.expose_secret().as_ref())
     }
 }
 
