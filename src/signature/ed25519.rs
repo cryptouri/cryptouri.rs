@@ -4,7 +4,6 @@ use crate::{
     algorithm::ED25519_ALG_ID,
     error::{Error, ErrorKind},
 };
-use zeroize::Zeroize;
 
 /// Size of an Ed25519 signature
 pub const ED25519_SIGNATURE_SIZE: usize = 64;
@@ -34,13 +33,6 @@ impl Ed25519Signature {
 impl AsRef<[u8]> for Ed25519Signature {
     fn as_ref(&self) -> &[u8] {
         &self.0[..]
-    }
-}
-
-// Signatures may be sensitive. Can't hurt (I hope!)
-impl Drop for Ed25519Signature {
-    fn drop(&mut self) {
-        (&mut self.0[..]).zeroize()
     }
 }
 

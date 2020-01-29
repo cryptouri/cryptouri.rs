@@ -88,19 +88,19 @@ impl Display for ErrorKind {
 impl std::error::Error for ErrorKind {}
 
 /// Create a new error (of a given enum variant) with a formatted message
-macro_rules! err {
+macro_rules! format_err {
     ($kind:path, $msg:expr) => {
         crate::error::Error::new($kind, Some($msg.to_string()))
     };
     ($kind:path, $fmt:expr, $($arg:tt)+) => {
-        err!($kind, format!($fmt, $($arg)+))
+        format_err!($kind, format!($fmt, $($arg)+))
     };
 }
 
 /// Create and return an error with a formatted message
 macro_rules! fail {
     ($kind:path, $msg:expr) => {
-        return Err(err!($kind, $msg).into());
+        return Err(format_err!($kind, $msg).into());
     };
     ($kind:path, $fmt:expr, $($arg:tt)+) => {
         fail!($kind, format!($fmt, $($arg)+));

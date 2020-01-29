@@ -18,6 +18,5 @@ keywords    = ["bech32", "cryptography", "keys", "security", "uri"]
 travis-ci = { repository = "cryptouri/cryptouri.rs" }
 
 [dependencies]
-generic-array = "0.13"
+secrecy = "0.6"
 subtle-encoding = { version = "0.5", features = ["bech32-preview"] }
-zeroize = { version = "1", features = ["zeroize_derive"] }
