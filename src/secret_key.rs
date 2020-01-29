@@ -11,13 +11,14 @@ pub use self::{
     ed25519::Ed25519SecretKey,
 };
 pub use secrecy::ExposeSecret;
-use std::convert::TryInto;
 
 use crate::{
     algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID},
     encoding::Encodable,
     error::{Error, ErrorKind},
 };
+use anomaly::fail;
+use std::convert::TryInto;
 
 /// Secret key algorithms
 pub enum SecretKey {

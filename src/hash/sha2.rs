@@ -4,6 +4,7 @@ use crate::{
     algorithm::SHA256_ALG_ID,
     error::{Error, ErrorKind},
 };
+use anomaly::fail;
 
 /// Size of a SHA-256 hash
 pub const SHA256_HASH_SIZE: usize = 32;

@@ -6,6 +6,7 @@ use crate::{
     algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID},
     error::{Error, ErrorKind},
 };
+use anomaly::format_err;
 use secrecy::{DebugSecret, ExposeSecret, Secret};
 use std::convert::{TryFrom, TryInto};
 
@@ -36,6 +37,7 @@ impl TryFrom<&[u8]> for Aes128GcmKey {
                     "bad AES-128 key length: {} (expected 16-bytes)",
                     slice.len(),
                 )
+                .into()
             })
     }
 }
@@ -53,6 +55,7 @@ impl TryFrom<&[u8]> for Aes256GcmKey {
                     "bad AES-256 key length: {} (expected 32-bytes)",
                     slice.len(),
                 )
+                .into()
             })
     }
 }

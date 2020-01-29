@@ -1,15 +1,16 @@
 //! Cryptographic signatures
 
+/// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
+mod ed25519;
+
+pub use self::ed25519::Ed25519Signature;
+
 use crate::{
     algorithm::ED25519_ALG_ID,
     encoding::Encodable,
     error::{Error, ErrorKind},
 };
-
-/// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
-mod ed25519;
-
-pub use self::ed25519::Ed25519Signature;
+use anomaly::fail;
 
 /// Signature algorithms
 pub enum Signature {
