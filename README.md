@@ -85,6 +85,7 @@ The **cryptouri** Rust crate is dual licensed under your choice of either of:
 [build-link]: https://github.com/cryptouri/cryptouri.rs/actions
 [msrv-image]: https://img.shields.io/badge/rustc-1.36+-blue.svg
 [safety-image]: https://img.shields.io/badge/unsafe-forbidden-success.svg
+[safety-link]: https://github.com/rust-secure-code/safety-dance/
 [license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
 [gitter-image]: https://badges.gitter.im/badge.svg
 [gitter-link]: https://gitter.im/cryptouri/Lobby
