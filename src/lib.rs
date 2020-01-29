@@ -1,12 +1,12 @@
 //! CryptoURI: URN-like namespace for cryptographic objects (keys, signatures, etc)
 //! with Bech32 encoding/checksums
 
-#![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
-#![forbid(unsafe_code)]
 #![doc(
     html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff",
     html_root_url = "https://docs.rs/cryptouri/0.2.0"
 )]
+#![forbid(unsafe_code)]
+#![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
 
 #[macro_use]
 mod encoding;
@@ -20,16 +20,19 @@ pub mod public_key;
 pub mod secret_key;
 pub mod signature;
 
-pub use crate::{encoding::Encodable, secret_key::AsSecretSlice};
+pub use crate::{
+    encoding::Encodable,
+    error::{Error, ErrorKind},
+    hash::Hash,
+    public_key::PublicKey,
+    secret_key::AsSecretSlice,
+    secret_key::SecretKey,
+    signature::Signature,
+};
 
 use crate::{
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
-    error::{Error, ErrorKind},
-    hash::Hash,
     parts::Parts,
-    public_key::PublicKey,
-    secret_key::SecretKey,
-    signature::Signature,
 };
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects
