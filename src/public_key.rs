@@ -5,6 +5,7 @@ use crate::{
     encoding::Encodable,
     error::{Error, ErrorKind},
 };
+use anomaly::fail;
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
 mod ed25519;

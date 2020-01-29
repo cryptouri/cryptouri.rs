@@ -4,6 +4,7 @@ use crate::{
     algorithm::ED25519_ALG_ID,
     error::{Error, ErrorKind},
 };
+use anomaly::fail;
 
 /// Size of an Ed25519 signature
 pub const ED25519_SIGNATURE_SIZE: usize = 64;

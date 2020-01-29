@@ -33,6 +33,7 @@ use crate::{
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
     parts::Parts,
 };
+use anomaly::fail;
 use secrecy::{ExposeSecret, SecretString};
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects

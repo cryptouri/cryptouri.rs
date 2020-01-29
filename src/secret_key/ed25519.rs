@@ -4,6 +4,7 @@ use crate::{
     algorithm::ED25519_ALG_ID,
     error::{Error, ErrorKind},
 };
+use anomaly::format_err;
 use secrecy::{DebugSecret, ExposeSecret, Secret};
 use std::convert::{TryFrom, TryInto};
 
@@ -26,6 +27,7 @@ impl TryFrom<&[u8]> for Ed25519SecretKey {
                     "bad Ed25519 secret key length: {} (expected 32-bytes)",
                     slice.len(),
                 )
+                .into()
             })
     }
 }
