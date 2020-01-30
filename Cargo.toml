@@ -4,10 +4,10 @@ description = """
 URN-like namespace for cryptographic objects (keys, signatures,
 etc) with Bech32 encoding/checksums
 """
-version     = "0.2.0" # Also update html_root_url in lib.rs when bumping this
+version     = "0.3.0" # Also update html_root_url in lib.rs when bumping this
 authors     = ["Tony Arcieri <bascule@gmail.com>"]
 license     = "Apache-2.0 OR MIT"
-homepage    = "https://cryptouri.org"
+homepage    = "https://github.com/cryptouri"
 repository  = "https://github.com/cryptouri/cryptouri.rs/"
 readme      = "README.md"
 edition     = "2018"
