@@ -11,12 +11,13 @@ mod ed25519;
 
 pub use self::{
     aes_gcm::{Aes128GcmKey, Aes256GcmKey},
+    chacha20poly1305::ChaCha20Poly1305Key,
     ed25519::Ed25519SecretKey,
 };
 pub use secrecy::ExposeSecret;
 
 use crate::{
-    algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, ED25519_ALG_ID},
+    algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID, CHACHA20POLY1305_ALG_ID, ED25519_ALG_ID},
     encoding::Encodable,
     error::{Error, ErrorKind},
 };
@@ -25,11 +26,14 @@ use std::convert::TryInto;
 
 /// Secret key algorithms
 pub enum SecretKey {
-    /// AES-128 in Galois Counter Mode
+    /// AES-128 in Galois/Counter Mode
     Aes128Gcm(Aes128GcmKey),
 
-    /// AES-256 in Galois Counter Mode
+    /// AES-256 in Galois/Counter Mode
     Aes256Gcm(Aes256GcmKey),
+
+    /// ChaCha20Poly1305 AEAD
+    ChaCha20Poly1305(ChaCha20Poly1305Key),
 
     /// Ed25519 private scalar
     Ed25519(Ed25519SecretKey),
@@ -41,6 +45,7 @@ impl SecretKey {
         let result = match alg {
             AES128GCM_ALG_ID => SecretKey::Aes128Gcm(slice.try_into()?),
             AES256GCM_ALG_ID => SecretKey::Aes256Gcm(slice.try_into()?),
+            CHACHA20POLY1305_ALG_ID => SecretKey::ChaCha20Poly1305(slice.try_into()?),
             ED25519_ALG_ID => SecretKey::Ed25519(slice.try_into()?),
             _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
@@ -94,6 +99,7 @@ impl Encodable for SecretKey {
         match self {
             SecretKey::Aes128Gcm(ref key) => key.to_uri_string(),
             SecretKey::Aes256Gcm(ref key) => key.to_uri_string(),
+            SecretKey::ChaCha20Poly1305(ref key) => key.to_uri_string(),
             SecretKey::Ed25519(ref key) => key.to_uri_string(),
         }
     }
@@ -101,8 +107,9 @@ impl Encodable for SecretKey {
     /// Serialize this `SecretKey` as a "dasherized" `String`
     fn to_dasherized_string(&self) -> String {
         match self {
-            SecretKey::Aes128Gcm(ref key) => key.to_uri_string(),
-            SecretKey::Aes256Gcm(ref key) => key.to_uri_string(),
+            SecretKey::Aes128Gcm(ref key) => key.to_dasherized_string(),
+            SecretKey::Aes256Gcm(ref key) => key.to_dasherized_string(),
+            SecretKey::ChaCha20Poly1305(ref key) => key.to_dasherized_string(),
             SecretKey::Ed25519(ref key) => key.to_dasherized_string(),
         }
     }
