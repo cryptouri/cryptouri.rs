@@ -40,7 +40,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "cryptouri"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "anomaly 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "secrecy 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
