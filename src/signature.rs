@@ -11,6 +11,7 @@ use crate::{
     error::{Error, ErrorKind},
 };
 use anomaly::fail;
+use std::convert::TryInto;
 
 /// Signature algorithms
 pub enum Signature {
@@ -22,7 +23,7 @@ impl Signature {
     /// Create a new `Signature` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
         let result = match alg {
-            ED25519_ALG_ID => Signature::Ed25519(Ed25519Signature::new(bytes)?),
+            ED25519_ALG_ID => Signature::Ed25519(bytes.try_into()?),
             _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 

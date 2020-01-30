@@ -5,6 +5,7 @@
 mod ed25519 {
     use cryptouri::public_key::Ed25519PublicKey;
     use cryptouri::{CryptoUri, Encodable};
+    use std::convert::TryInto;
 
     const EXAMPLE_URI: &str =
         "crypto:pub:key:ed25519:6adfsqvzky9t042tlmfujeq88g8wzuhnm2nzxfd0qgdx3ac82ydqf03cvv";
@@ -37,13 +38,13 @@ mod ed25519 {
 
     #[test]
     fn serialize_uri() {
-        let key = Ed25519PublicKey::new(EXAMPLE_BYTES).unwrap();
+        let key: Ed25519PublicKey = EXAMPLE_BYTES.try_into().unwrap();
         assert_eq!(&key.to_uri_string(), EXAMPLE_URI);
     }
 
     #[test]
     fn serialize_dasherized() {
-        let key = Ed25519PublicKey::new(EXAMPLE_BYTES).unwrap();
+        let key: Ed25519PublicKey = EXAMPLE_BYTES.try_into().unwrap();
         assert_eq!(&key.to_dasherized_string(), EXAMPLE_DASHERIZED);
     }
 }

@@ -4,7 +4,8 @@ use crate::{
     algorithm::SHA256_ALG_ID,
     error::{Error, ErrorKind},
 };
-use anomaly::fail;
+use anomaly::format_err;
+use std::convert::{TryFrom, TryInto};
 
 /// Size of a SHA-256 hash
 pub const SHA256_HASH_SIZE: usize = 32;
@@ -12,22 +13,19 @@ pub const SHA256_HASH_SIZE: usize = 32;
 /// NIST SHA-256 hashes
 pub struct Sha256Hash(pub [u8; SHA256_HASH_SIZE]);
 
-impl Sha256Hash {
-    /// Create a new SHA-256 hash
-    pub fn new(slice: &[u8]) -> Result<Self, Error> {
-        if slice.len() != SHA256_HASH_SIZE {
-            fail!(
+impl TryFrom<&[u8]> for Sha256Hash {
+    type Error = Error;
+
+    fn try_from(slice: &[u8]) -> Result<Self, Error> {
+        slice.try_into().map(Sha256Hash).map_err(|_| {
+            format_err!(
                 ErrorKind::ParseError,
                 "bad SHA-256 hash length: {} (expected {})",
                 slice.len(),
                 SHA256_HASH_SIZE
-            );
-        }
-
-        let mut hash_bytes = [0u8; SHA256_HASH_SIZE];
-        hash_bytes.copy_from_slice(slice);
-
-        Ok(Sha256Hash(hash_bytes))
+            )
+            .into()
+        })
     }
 }
 
