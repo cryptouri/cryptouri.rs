@@ -1,13 +1,16 @@
 //! Secret Key types
 
-/// Advanced Encryption Standard (AES - FIPS 197)
-mod aes;
+/// Advanced Encryption Standard (AES - FIPS 197) in Galois/Counter Mode
+mod aes_gcm;
+
+/// ChaCha20Poly1305 AEAD (RFC 8439)
+mod chacha20poly1305;
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
 mod ed25519;
 
 pub use self::{
-    aes::{Aes128GcmKey, Aes256GcmKey},
+    aes_gcm::{Aes128GcmKey, Aes256GcmKey},
     ed25519::Ed25519SecretKey,
 };
 pub use secrecy::ExposeSecret;
