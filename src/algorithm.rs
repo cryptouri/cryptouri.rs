@@ -17,6 +17,9 @@ pub const AES128GCM_ALG_ID: &str = "aes128gcm";
 /// AES-256 in Galois Counter Mode (GCM)
 pub const AES256GCM_ALG_ID: &str = "aes256gcm";
 
+/// ChaCha20Poly1305 AEAD
+pub const CHACHA20POLY1305_ALG_ID: &str = "chacha20poly1305";
+
 //
 // Signature algorithms
 //
