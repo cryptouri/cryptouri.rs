@@ -11,6 +11,7 @@ use crate::{
     error::{Error, ErrorKind},
 };
 use anomaly::fail;
+use std::convert::TryInto;
 
 /// Digest (i.e. hash) algorithms
 pub enum Hash {
@@ -22,7 +23,7 @@ impl Hash {
     /// Create a new `Digest` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
         let result = match alg {
-            SHA256_ALG_ID => Hash::Sha256(Sha256Hash::new(bytes)?),
+            SHA256_ALG_ID => Hash::Sha256(bytes.try_into()?),
             _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 

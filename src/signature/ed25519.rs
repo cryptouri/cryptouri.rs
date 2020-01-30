@@ -5,6 +5,7 @@ use crate::{
     error::{Error, ErrorKind},
 };
 use anomaly::fail;
+use core::convert::TryFrom;
 
 /// Size of an Ed25519 signature
 pub const ED25519_SIGNATURE_SIZE: usize = 64;
@@ -12,9 +13,12 @@ pub const ED25519_SIGNATURE_SIZE: usize = 64;
 /// Ed25519 signature (i.e. compressed Edwards-y coordinate)
 pub struct Ed25519Signature(pub [u8; ED25519_SIGNATURE_SIZE]);
 
-impl Ed25519Signature {
-    /// Create a new Ed25519 signature
-    pub fn new(slice: &[u8]) -> Result<Self, Error> {
+impl TryFrom<&[u8]> for Ed25519Signature {
+    type Error = Error;
+
+    fn try_from(slice: &[u8]) -> Result<Self, Error> {
+        // NOTE: Can't use `TryInto` here because `[u8; 64]` doesn't impl
+        // `TryFrom<&[u8]>`
         if slice.len() != ED25519_SIGNATURE_SIZE {
             fail!(
                 ErrorKind::ParseError,

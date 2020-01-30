@@ -6,6 +6,7 @@ use crate::{
     error::{Error, ErrorKind},
 };
 use anomaly::fail;
+use std::convert::TryInto;
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
 mod ed25519;
@@ -22,7 +23,7 @@ impl PublicKey {
     /// Create a new `PublicKey` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
         let result = match alg {
-            ED25519_ALG_ID => PublicKey::Ed25519(Ed25519PublicKey::new(bytes)?),
+            ED25519_ALG_ID => PublicKey::Ed25519(bytes.try_into()?),
             _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
         };
 
