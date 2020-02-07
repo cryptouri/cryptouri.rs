@@ -11,7 +11,7 @@ use std::convert::{TryFrom, TryInto};
 /// Size of an Ed25519 secret key
 pub const ED25519_SEC_KEY_SIZE: usize = 32;
 
-/// Ed25519 secret key (i.e. compressed Edwards-y coordinate)
+/// Ed25519 secret key (i.e. private scalar)
 pub struct Ed25519SecretKey(Secret<[u8; ED25519_SEC_KEY_SIZE]>);
 
 impl TryFrom<&[u8]> for Ed25519SecretKey {
