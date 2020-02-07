@@ -17,6 +17,9 @@ pub(crate) struct Encoding {
     /// Bech32 delimiter which separates "Human Readable Part" from binary part
     pub delimiter: char,
 
+    /// Character used to combine disparate primitives into a ciphersuite
+    pub combine: char,
+
     /// Fragment delimiter
     pub fragment_delimiter: Option<char>,
 }
@@ -30,6 +33,7 @@ pub(crate) const URI_ENCODING: &Encoding = &Encoding {
     secret_key_scheme: "crypto:sec:key:",
     signature_scheme: "crypto:sig:",
     delimiter: ':',
+    combine: '+',
     fragment_delimiter: Some('#'),
 };
 
@@ -40,6 +44,7 @@ pub(crate) const DASHERIZED_ENCODING: &Encoding = &Encoding {
     secret_key_scheme: "crypto-sec-key-",
     signature_scheme: "crypto-sig-",
     delimiter: '-',
+    combine: '_',
     fragment_delimiter: None,
 };
 

@@ -77,10 +77,18 @@ impl CryptoUri {
                 parts.data.expose_secret(),
             )?)
         } else if parts.prefix.starts_with(encoding.secret_key_scheme) {
-            CryptoUriKind::SecretKey(SecretKey::new(
-                &parts.prefix[encoding.secret_key_scheme.len()..],
-                parts.data.expose_secret(),
-            )?)
+            let alg_id = &parts.prefix[encoding.secret_key_scheme.len()..];
+
+            if alg_id.contains(encoding.combine) {
+                // Multi-algorithm combination (e.g. KDF)
+                let alg_ids = alg_id.split(encoding.combine).collect::<Vec<_>>();
+                CryptoUriKind::SecretKey(SecretKey::new_combination(
+                    &alg_ids,
+                    parts.data.expose_secret(),
+                )?)
+            } else {
+                CryptoUriKind::SecretKey(SecretKey::new(alg_id, parts.data.expose_secret())?)
+            }
         } else if parts.prefix.starts_with(encoding.signature_scheme) {
             CryptoUriKind::Signature(Signature::new(
                 &parts.prefix[encoding.signature_scheme.len()..],
