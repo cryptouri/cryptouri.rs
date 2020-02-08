@@ -92,3 +92,38 @@ secret_key_test!(
         0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb
     ]
 );
+
+/// Tests for serializing a combined HKDF-SHA-256+AES-256-GCM key
+mod hkdfsha256_aes256gcm_key {
+    use cryptouri::{
+        secret_key::{Algorithm, HkdfSha256Key},
+        Encodable,
+    };
+
+    const KEY_BYTES: &[u8] = &[
+        0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb,
+        0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb, 0xb,
+    ];
+
+    /// Test for serializing `hkdfsha256+aes256gcm`
+    #[test]
+    fn serialize_uri() {
+        let key = HkdfSha256Key::new(KEY_BYTES, Algorithm::Aes256Gcm).unwrap();
+
+        assert_eq!(
+            key.to_uri_string(),
+            "crypto:sec:key:hkdfsha256+aes256gcm:pv9skzctpv9skzctpv9skzctpv9skzctpv9skzctpv9skzctpv9sxm0sk0"
+        );
+    }
+
+    /// Test for serializing `hkdfsha256_aes256gcm`
+    #[test]
+    fn serialize_dasherized() {
+        let key = HkdfSha256Key::new(KEY_BYTES, Algorithm::Aes256Gcm).unwrap();
+
+        assert_eq!(
+            key.to_dasherized_string(),
+            "crypto-sec-key-hkdfsha256_aes256gcm-pv9skzctpv9skzctpv9skzctpv9skzctpv9skzctpv9skzctpv9sjrz6qp"
+        );
+    }
+}

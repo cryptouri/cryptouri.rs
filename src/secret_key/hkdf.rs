@@ -3,6 +3,7 @@
 use super::Algorithm;
 use crate::{
     algorithm::HKDFSHA256_ALG_ID,
+    encoding::{Encodable, DASHERIZED_ENCODING, URI_ENCODING},
     error::{Error, ErrorKind},
 };
 use anomaly::{fail, format_err};
@@ -72,4 +73,36 @@ impl ExposeSecret<[u8; HKDFSHA256_KEY_SIZE]> for HkdfSha256Key {
     }
 }
 
-impl_encodable_secret_key!(HkdfSha256Key, HKDFSHA256_ALG_ID);
+impl Encodable for HkdfSha256Key {
+    #[inline]
+    fn to_uri_string(&self) -> String {
+        let mut alg_id = HKDFSHA256_ALG_ID.to_owned();
+
+        // TODO(tarcieri): generalize serialization for cipher combinations
+        if let Some(derived_alg) = &self.derived_alg {
+            alg_id = format!("{}+{}", alg_id, derived_alg);
+        }
+
+        use subtle_encoding::bech32::{self, Bech32};
+        Bech32::new(bech32::DEFAULT_CHARSET, URI_ENCODING.delimiter).encode(
+            URI_ENCODING.secret_key_scheme.to_owned() + &alg_id,
+            &self.expose_secret()[..],
+        )
+    }
+
+    #[inline]
+    fn to_dasherized_string(&self) -> String {
+        let mut alg_id = HKDFSHA256_ALG_ID.to_owned();
+
+        // TODO(tarcieri): generalize serialization for cipher combinations
+        if let Some(derived_alg) = &self.derived_alg {
+            alg_id = format!("{}_{}", alg_id, derived_alg);
+        }
+
+        use subtle_encoding::bech32::{self, Bech32};
+        Bech32::new(bech32::DEFAULT_CHARSET, DASHERIZED_ENCODING.delimiter).encode(
+            DASHERIZED_ENCODING.secret_key_scheme.to_owned() + &alg_id,
+            &self.expose_secret()[..],
+        )
+    }
+}
