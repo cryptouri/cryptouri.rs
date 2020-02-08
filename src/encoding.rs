@@ -1,6 +1,7 @@
 //! CryptoURI encoding support
 
 /// Characters to use when encoding CryptoUris
+#[derive(Debug, Eq, PartialEq)]
 pub(crate) struct Encoding {
     /// Scheme prefix for hashes
     pub hash_scheme: &'static str,

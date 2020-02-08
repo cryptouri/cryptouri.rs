@@ -12,6 +12,7 @@ use std::convert::{TryFrom, TryInto};
 pub const ED25519_SEC_KEY_SIZE: usize = 32;
 
 /// Ed25519 secret key (i.e. private scalar)
+#[derive(Clone)]
 pub struct Ed25519SecretKey(Secret<[u8; ED25519_SEC_KEY_SIZE]>);
 
 impl TryFrom<&[u8]> for Ed25519SecretKey {
