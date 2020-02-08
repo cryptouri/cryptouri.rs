@@ -20,5 +20,5 @@ travis-ci = { repository = "cryptouri/cryptouri.rs" }
 [dependencies]
 anomaly = "0.2"
 secrecy = "0.6"
-subtle-encoding = { version = "0.5", features = ["bech32-preview"] }
+subtle-encoding = { version = "0.5.1", features = ["bech32-preview"] }
 thiserror = "1"

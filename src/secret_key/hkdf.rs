@@ -14,6 +14,7 @@ use std::convert::{TryFrom, TryInto};
 pub const HKDFSHA256_KEY_SIZE: usize = 32;
 
 /// HKDF secret key
+#[derive(Clone)]
 pub struct HkdfSha256Key {
     /// HKDF input key material
     ikm: Secret<[u8; HKDFSHA256_KEY_SIZE]>,
