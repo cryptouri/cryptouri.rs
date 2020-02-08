@@ -1,3 +1,8 @@
+## [0.4.0] (2020-02-08)
+
+- Add Clone and Debug impls on key/encoding types ([#32])
+- Initial `hkdfsha256` (and alg combination) support ([#30], [#31])
+
 ## [0.3.0] (2020-01-29)
 
 - ChaCha20Poly1305 support ([#26], [#27])
@@ -29,6 +34,10 @@
 
 - Initial release
 
+[0.4.0]: https://github.com/cryptouri/cryptouri.rs/pull/33
+[#32]: https://github.com/cryptouri/cryptouri.rs/pull/32
+[#31]: https://github.com/cryptouri/cryptouri.rs/pull/31
+[#30]: https://github.com/cryptouri/cryptouri.rs/pull/30
 [0.3.0]: https://github.com/cryptouri/cryptouri.rs/pull/28
 [#27]: https://github.com/cryptouri/cryptouri.rs/pull/27
 [#26]: https://github.com/cryptouri/cryptouri.rs/pull/26
