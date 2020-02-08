@@ -3,7 +3,7 @@
 
 #![doc(
     html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff",
-    html_root_url = "https://docs.rs/cryptouri/0.3.0"
+    html_root_url = "https://docs.rs/cryptouri/0.4.0"
 )]
 #![forbid(unsafe_code)]
 #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
