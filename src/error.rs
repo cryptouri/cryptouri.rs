@@ -1,29 +1,25 @@
 //! Error types
 
 use anomaly::{BoxError, Context};
+use displaydoc::Display;
 use std::{
     fmt::{self, Display},
     ops::Deref,
 };
-use thiserror::Error;
 
 /// Kinds of errors
-#[derive(Copy, Clone, Debug, Error, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Display, Eq, PartialEq)]
 pub enum ErrorKind {
-    /// Unknown or unsupported algorithm
-    #[error("unknown or unsupported algorithm")]
+    /// unknown or unsupported algorithm
     AlgorithmInvalid,
 
-    /// Checksum error
-    #[error("checksum error")]
+    /// checksum error
     ChecksumInvalid,
 
-    /// Error parsing CryptoUri syntax
-    #[error("parse error")]
+    /// parse error
     ParseError,
 
-    /// Unknown CryptoUri scheme
-    #[error("unknown URI scheme")]
+    /// unknown URI scheme
     SchemeInvalid,
 }
 
@@ -33,6 +29,8 @@ impl ErrorKind {
         Context::new(self, Some(source.into()))
     }
 }
+
+impl std::error::Error for ErrorKind {}
 
 /// Error type
 #[derive(Debug)]
