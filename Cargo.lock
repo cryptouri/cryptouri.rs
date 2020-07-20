@@ -44,7 +44,7 @@ version = "0.4.0"
 dependencies = [
  "anomaly 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "displaydoc 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "secrecy 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "secrecy 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "subtle-encoding 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -86,7 +86,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "secrecy"
-version = "0.6.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "zeroize 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -131,7 +131,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum proc-macro2 1.0.9 (registry+https://github.com/rust-lang/crates.io-index)" = "6c09721c6781493a2a492a96b5a5bf19b65917fe6728884e7c44dd0c60ca3435"
 "checksum quote 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2bdc6c187c65bca4260c9011c9e3132efe4909da44726bad24cf7572ae338d7f"
 "checksum rustc-demangle 0.1.16 (registry+https://github.com/rust-lang/crates.io-index)" = "4c691c0e608126e00913e33f0ccf3727d5fc84573623b8d65b2df340b5201783"
-"checksum secrecy 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9182278ed645df3477a9c27bfee0621c621aa16f6972635f7f795dae3d81070f"
+"checksum secrecy 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0673d6a6449f5e7d12a1caf424fd9363e2af3a4953023ed455e3c4beef4597c0"
 "checksum subtle-encoding 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "7dcb1ed7b8330c5eed5441052651dd7a12c75e2ed88f2ec024ae1fa3a5e59945"
 "checksum syn 1.0.16 (registry+https://github.com/rust-lang/crates.io-index)" = "123bd9499cfb380418d509322d7a6d52e5315f064fe4b3ad18a53d6b92c07859"
 "checksum unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c"
