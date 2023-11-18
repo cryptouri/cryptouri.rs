@@ -49,7 +49,7 @@ For more information, please see [CODE_OF_CONDUCT.md].
 
 Bug reports and pull requests are welcome on GitHub at:
 
-<https://github.com/cryptouri/cryptouri-rs>
+<https://github.com/cryptouri/cryptouri.rs>
 
 Unless you explicitly state otherwise, any contribution intentionally
 submitted for inclusion in the work by you, as defined in the Apache-2.0
