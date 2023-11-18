@@ -1,8 +1,8 @@
 //! CryptoURI parts
 
 use crate::{encoding::Encoding, error::Error};
-use secrecy::{Secret, SecretString, SecretVec};
 use subtle_encoding::bech32::{self, Bech32};
+use zeroize::Zeroize;
 
 /// Parts of a CryptoURI
 pub(crate) struct Parts {
@@ -10,10 +10,10 @@ pub(crate) struct Parts {
     pub(crate) prefix: String,
 
     /// Data (i.e. public or private key or key fingerprint)
-    pub(crate) data: SecretVec<u8>,
+    pub(crate) data: Vec<u8>,
 
     /// URI fragment (i.e. comment)
-    pub(crate) fragment: Option<SecretString>,
+    pub(crate) fragment: Option<String>,
 }
 
 impl Parts {
@@ -30,8 +30,8 @@ impl Parts {
 
                 return Ok(Self {
                     prefix,
-                    data: Secret::new(data),
-                    fragment: Some(Secret::new(fragment)),
+                    data,
+                    fragment: Some(fragment),
                 });
             }
         }
@@ -42,8 +42,15 @@ impl Parts {
 
         Ok(Self {
             prefix,
-            data: Secret::new(data),
+            data,
             fragment: None,
         })
+    }
+}
+
+impl Drop for Parts {
+    fn drop(&mut self) {
+        self.data.zeroize();
+        self.fragment.zeroize();
     }
 }

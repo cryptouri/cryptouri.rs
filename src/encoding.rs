@@ -107,7 +107,6 @@ macro_rules! impl_encodable_secret_key {
         impl crate::encoding::Encodable for $name {
             #[inline]
             fn to_uri_string(&self) -> String {
-                use secrecy::ExposeSecret;
                 use subtle_encoding::bech32::{self, Bech32};
                 Bech32::new(
                     bech32::DEFAULT_CHARSET,
@@ -115,13 +114,12 @@ macro_rules! impl_encodable_secret_key {
                 )
                 .encode(
                     $crate::encoding::URI_ENCODING.secret_key_scheme.to_owned() + $alg,
-                    &self.expose_secret()[..],
+                    &self.as_ref()[..],
                 )
             }
 
             #[inline]
             fn to_dasherized_string(&self) -> String {
-                use secrecy::ExposeSecret;
                 use subtle_encoding::bech32::{self, Bech32};
                 Bech32::new(
                     bech32::DEFAULT_CHARSET,
@@ -132,7 +130,7 @@ macro_rules! impl_encodable_secret_key {
                         .secret_key_scheme
                         .to_owned()
                         + $alg,
-                    &self.expose_secret()[..],
+                    &self.as_ref()[..],
                 )
             }
         }

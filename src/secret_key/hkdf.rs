@@ -6,8 +6,7 @@ use crate::{
     encoding::{Encodable, DASHERIZED_ENCODING, URI_ENCODING},
     error::Error,
 };
-use secrecy::{DebugSecret, ExposeSecret, Secret};
-use std::convert::{TryFrom, TryInto};
+use zeroize::{Zeroize, ZeroizeOnDrop};
 
 /// Size of an HKDF-SHA-256 secret key
 pub const HKDFSHA256_KEY_SIZE: usize = 32;
@@ -16,7 +15,7 @@ pub const HKDFSHA256_KEY_SIZE: usize = 32;
 #[derive(Clone)]
 pub struct HkdfSha256Key {
     /// HKDF input key material
-    ikm: Secret<[u8; HKDFSHA256_KEY_SIZE]>,
+    ikm: Box<[u8; HKDFSHA256_KEY_SIZE]>,
 
     /// Key type to derive (if specified)
     derived_alg: Option<Algorithm>,
@@ -40,28 +39,15 @@ impl HkdfSha256Key {
     }
 }
 
-impl TryFrom<&[u8]> for HkdfSha256Key {
-    type Error = Error;
-
-    fn try_from(slice: &[u8]) -> Result<Self, Error> {
-        slice
-            .try_into()
-            .map(|bytes| HkdfSha256Key {
-                ikm: Secret::new(bytes),
-                derived_alg: None,
-            })
-            .map_err(|_| Error::Length {
-                actual: slice.len(),
-                expected: 32,
-            })
+impl AsRef<[u8; HKDFSHA256_KEY_SIZE]> for HkdfSha256Key {
+    fn as_ref(&self) -> &[u8; HKDFSHA256_KEY_SIZE] {
+        &self.ikm
     }
 }
 
-impl DebugSecret for HkdfSha256Key {}
-
-impl ExposeSecret<[u8; HKDFSHA256_KEY_SIZE]> for HkdfSha256Key {
-    fn expose_secret(&self) -> &[u8; HKDFSHA256_KEY_SIZE] {
-        self.ikm.expose_secret()
+impl Drop for HkdfSha256Key {
+    fn drop(&mut self) {
+        self.ikm.zeroize();
     }
 }
 
@@ -78,7 +64,7 @@ impl Encodable for HkdfSha256Key {
         use subtle_encoding::bech32::{self, Bech32};
         Bech32::new(bech32::DEFAULT_CHARSET, URI_ENCODING.delimiter).encode(
             URI_ENCODING.secret_key_scheme.to_owned() + &alg_id,
-            &self.expose_secret()[..],
+            &self.as_ref()[..],
         )
     }
 
@@ -94,7 +80,26 @@ impl Encodable for HkdfSha256Key {
         use subtle_encoding::bech32::{self, Bech32};
         Bech32::new(bech32::DEFAULT_CHARSET, DASHERIZED_ENCODING.delimiter).encode(
             DASHERIZED_ENCODING.secret_key_scheme.to_owned() + &alg_id,
-            &self.expose_secret()[..],
+            &self.as_ref()[..],
         )
     }
 }
+
+impl TryFrom<&[u8]> for HkdfSha256Key {
+    type Error = Error;
+
+    fn try_from(slice: &[u8]) -> Result<Self, Error> {
+        slice
+            .try_into()
+            .map(|bytes| HkdfSha256Key {
+                ikm: Box::new(bytes),
+                derived_alg: None,
+            })
+            .map_err(|_| Error::Length {
+                actual: slice.len(),
+                expected: 32,
+            })
+    }
+}
+
+impl ZeroizeOnDrop for HkdfSha256Key {}

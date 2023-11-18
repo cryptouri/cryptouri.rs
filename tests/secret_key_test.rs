@@ -3,25 +3,18 @@ macro_rules! secret_key_test {
         mod $name {
             use cryptouri::secret_key::$keytype;
             use cryptouri::{CryptoUri, Encodable};
-            use secrecy::ExposeSecret;
             use std::convert::TryFrom;
 
             #[test]
             fn parse_uri() {
                 let key = CryptoUri::parse_uri($uri).unwrap();
-                assert_eq!(
-                    key.secret_key().unwrap().$name().unwrap().expose_secret(),
-                    $bytes
-                );
+                assert_eq!(key.secret_key().unwrap().$name().unwrap().as_ref(), $bytes);
             }
 
             #[test]
             fn parse_dasherized() {
                 let key = CryptoUri::parse_dasherized($dasherized).unwrap();
-                assert_eq!(
-                    key.secret_key().unwrap().$name().unwrap().expose_secret(),
-                    $bytes
-                );
+                assert_eq!(key.secret_key().unwrap().$name().unwrap().as_ref(), $bytes);
             }
 
             #[test]

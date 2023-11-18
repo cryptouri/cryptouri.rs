@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - rust: 1.56.0 # MSRV
+          - rust: 1.60.0 # MSRV
           - rust: stable
 
     steps:

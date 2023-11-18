@@ -1,7 +1,6 @@
 //! Ed25519 signatures
 
 use crate::{algorithm::ED25519_ALG_ID, error::Error};
-use core::convert::TryFrom;
 
 /// Size of an Ed25519 signature
 pub const ED25519_SIGNATURE_SIZE: usize = 64;

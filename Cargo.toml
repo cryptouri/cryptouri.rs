@@ -10,11 +10,11 @@ readme = "README.md"
 categories = ["cryptography", "encoding"]
 keywords = ["bech32", "cryptography", "keys", "security", "uri"]
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.60"
 
 [badges]
 travis-ci = { repository = "cryptouri/cryptouri.rs" }
 
 [dependencies]
-secrecy = "0.6"
 subtle-encoding = { version = "0.5.1", features = ["bech32-preview"] }
+zeroize = "1.7"
