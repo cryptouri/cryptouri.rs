@@ -1,11 +1,6 @@
 //! Public key types
 
-use crate::{
-    algorithm::ED25519_ALG_ID,
-    encoding::Encodable,
-    error::{Error, ErrorKind},
-};
-use anomaly::fail;
+use crate::{algorithm::ED25519_ALG_ID, encoding::Encodable, error::Error};
 use std::convert::TryInto;
 
 /// Ed25519 elliptic curve digital signature algorithm (RFC 8032)
@@ -22,12 +17,10 @@ pub enum PublicKey {
 impl PublicKey {
     /// Create a new `PublicKey` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
-        let result = match alg {
-            ED25519_ALG_ID => PublicKey::Ed25519(bytes.try_into()?),
-            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
-        };
-
-        Ok(result)
+        match alg {
+            ED25519_ALG_ID => Ok(PublicKey::Ed25519(bytes.try_into()?)),
+            _ => Err(Error::Algorithm(alg.to_owned())),
+        }
     }
 
     /// Return an `Ed25519PublicKey` if the underlying public key is Ed25519

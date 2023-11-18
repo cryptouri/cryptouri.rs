@@ -21,11 +21,7 @@ pub mod secret_key;
 pub mod signature;
 
 pub use crate::{
-    encoding::Encodable,
-    error::{Error, ErrorKind},
-    hash::Hash,
-    public_key::PublicKey,
-    secret_key::SecretKey,
+    encoding::Encodable, error::Error, hash::Hash, public_key::PublicKey, secret_key::SecretKey,
     signature::Signature,
 };
 
@@ -33,7 +29,6 @@ use crate::{
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
     parts::Parts,
 };
-use anomaly::fail;
 use secrecy::{ExposeSecret, SecretString};
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects
@@ -95,11 +90,7 @@ impl CryptoUri {
                 parts.data.expose_secret(),
             )?)
         } else {
-            fail!(
-                ErrorKind::SchemeInvalid,
-                "unknown CryptoURI prefix: {}",
-                parts.prefix
-            )
+            return Err(Error::Scheme(parts.prefix.to_owned()));
         };
 
         Ok(Self {

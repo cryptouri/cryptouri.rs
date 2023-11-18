@@ -19,9 +19,8 @@ use crate::{
         HKDFSHA256_ALG_ID,
     },
     encoding::Encodable,
-    error::{Error, ErrorKind},
+    error::Error,
 };
-use anomaly::fail;
 use std::{
     convert::TryInto,
     fmt::{self, Display},
@@ -70,7 +69,7 @@ impl FromStr for Algorithm {
             CHACHA20POLY1305_ALG_ID => Algorithm::ChaCha20Poly1305,
             ED25519_ALG_ID => Algorithm::Ed25519,
             HKDFSHA256_ALG_ID => Algorithm::HkdfSha256,
-            _ => fail!(ErrorKind::ParseError, "invalid secret key algorithm: {}", s),
+            _ => return Err(Error::Algorithm(s.to_owned())),
         })
     }
 }
@@ -97,35 +96,26 @@ pub enum SecretKey {
 impl SecretKey {
     /// Create a new `SecretKey` for the given algorithm
     pub fn new(alg: &str, slice: &[u8]) -> Result<Self, Error> {
-        let result = match alg {
+        Ok(match alg {
             AES128GCM_ALG_ID => SecretKey::Aes128Gcm(slice.try_into()?),
             AES256GCM_ALG_ID => SecretKey::Aes256Gcm(slice.try_into()?),
             CHACHA20POLY1305_ALG_ID => SecretKey::ChaCha20Poly1305(slice.try_into()?),
             ED25519_ALG_ID => SecretKey::Ed25519(slice.try_into()?),
             HKDFSHA256_ALG_ID => SecretKey::HkdfSha256(slice.try_into()?),
-            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
-        };
-
-        Ok(result)
+            _ => return Err(Error::Algorithm(alg.to_owned())),
+        })
     }
 
     /// Create a new `SecretKey` which combines multiple algorithms
     pub fn new_combination(algs: &[&str], slice: &[u8]) -> Result<Self, Error> {
         if algs.len() != 2 {
-            fail!(
-                ErrorKind::ParseError,
-                "can't combine more than two algorithms: {}",
-                algs.join(",")
-            );
+            // can't combine more than two algorithms
+            return Err(Error::Parse);
         }
 
         // TODO(tarcieri): support other key derivation algorithms besides HKDF-SHA-256
         if algs[0] != HKDFSHA256_ALG_ID {
-            fail!(
-                ErrorKind::ParseError,
-                "invalid algorithm at start of combination: {}",
-                algs[0]
-            );
+            return Err(Error::Algorithm(algs[0].to_owned()));
         }
 
         let key = HkdfSha256Key::new(slice, algs[1].parse()?)?;

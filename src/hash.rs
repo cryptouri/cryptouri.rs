@@ -6,11 +6,7 @@ mod sha2;
 pub use self::sha2::Sha256Hash;
 
 use crate::algorithm::SHA256_ALG_ID;
-use crate::{
-    encoding::Encodable,
-    error::{Error, ErrorKind},
-};
-use anomaly::fail;
+use crate::{encoding::Encodable, error::Error};
 use std::convert::TryInto;
 
 /// Digest (i.e. hash) algorithms
@@ -22,12 +18,10 @@ pub enum Hash {
 impl Hash {
     /// Create a new `Digest` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
-        let result = match alg {
-            SHA256_ALG_ID => Hash::Sha256(bytes.try_into()?),
-            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
-        };
-
-        Ok(result)
+        match alg {
+            SHA256_ALG_ID => Ok(Hash::Sha256(bytes.try_into()?)),
+            _ => Err(Error::Algorithm(alg.to_owned())),
+        }
     }
 
     /// Return a `Sha256Digest` if the underlying digest is SHA-256

@@ -1,10 +1,6 @@
 //! ChaCha20Poly1305 AEAD (RFC 8439)
 
-use crate::{
-    algorithm::CHACHA20POLY1305_ALG_ID,
-    error::{Error, ErrorKind},
-};
-use anomaly::format_err;
+use crate::{algorithm::CHACHA20POLY1305_ALG_ID, error::Error};
 use secrecy::{DebugSecret, ExposeSecret, Secret};
 use std::convert::{TryFrom, TryInto};
 
@@ -22,13 +18,9 @@ impl TryFrom<&[u8]> for ChaCha20Poly1305Key {
         slice
             .try_into()
             .map(|bytes| ChaCha20Poly1305Key(Secret::new(bytes)))
-            .map_err(|_| {
-                format_err!(
-                    ErrorKind::ParseError,
-                    "bad ChaCha20Poly1305 key: expected 32-bytes, got {}",
-                    slice.len(),
-                )
-                .into()
+            .map_err(|_| Error::Length {
+                actual: slice.len(),
+                expected: 32,
             })
     }
 }

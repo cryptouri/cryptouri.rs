@@ -1,10 +1,6 @@
 //! The Ed25519 digital signature algorithm
 
-use crate::{
-    algorithm::ED25519_ALG_ID,
-    error::{Error, ErrorKind},
-};
-use anomaly::format_err;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
 use secrecy::{DebugSecret, ExposeSecret, Secret};
 use std::convert::{TryFrom, TryInto};
 
@@ -22,13 +18,9 @@ impl TryFrom<&[u8]> for Ed25519SecretKey {
         slice
             .try_into()
             .map(|bytes| Ed25519SecretKey(Secret::new(bytes)))
-            .map_err(|_| {
-                format_err!(
-                    ErrorKind::ParseError,
-                    "bad Ed25519 secret key length: {} (expected 32-bytes)",
-                    slice.len(),
-                )
-                .into()
+            .map_err(|_| Error::Length {
+                actual: slice.len(),
+                expected: 32,
             })
     }
 }

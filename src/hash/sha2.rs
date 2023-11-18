@@ -1,10 +1,6 @@
 //! SHA2 hash types
 
-use crate::{
-    algorithm::SHA256_ALG_ID,
-    error::{Error, ErrorKind},
-};
-use anomaly::format_err;
+use crate::{algorithm::SHA256_ALG_ID, error::Error};
 use std::convert::{TryFrom, TryInto};
 
 /// Size of a SHA-256 hash
@@ -17,14 +13,9 @@ impl TryFrom<&[u8]> for Sha256Hash {
     type Error = Error;
 
     fn try_from(slice: &[u8]) -> Result<Self, Error> {
-        slice.try_into().map(Sha256Hash).map_err(|_| {
-            format_err!(
-                ErrorKind::ParseError,
-                "bad SHA-256 hash length: {} (expected {})",
-                slice.len(),
-                SHA256_HASH_SIZE
-            )
-            .into()
+        slice.try_into().map(Sha256Hash).map_err(|_| Error::Length {
+            actual: slice.len(),
+            expected: SHA256_HASH_SIZE,
         })
     }
 }

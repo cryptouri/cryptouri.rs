@@ -24,8 +24,9 @@ impl Parts {
         if let Some(delimiter) = encoding.fragment_delimiter {
             if let Some(pos) = uri.find(delimiter) {
                 let fragment = uri[(pos + 1)..].to_owned();
-                let (prefix, data) =
-                    Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(&uri[..pos])?;
+                let (prefix, data) = Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter)
+                    .decode(&uri[..pos])
+                    .map_err(|_| Error::Parse)?;
 
                 return Ok(Self {
                     prefix,
@@ -35,8 +36,9 @@ impl Parts {
             }
         }
 
-        let (prefix, data) =
-            Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter).decode(uri)?;
+        let (prefix, data) = Bech32::new(bech32::DEFAULT_CHARSET, encoding.delimiter)
+            .decode(uri)
+            .map_err(|_| Error::Parse)?;
 
         Ok(Self {
             prefix,
