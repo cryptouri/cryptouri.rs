@@ -11,7 +11,6 @@ pub use self::{
     ed25519::Ed25519SecretKey,
     hkdf::HkdfSha256Key,
 };
-pub use secrecy::ExposeSecret;
 
 use crate::{
     algorithm::{
@@ -22,7 +21,6 @@ use crate::{
     error::Error,
 };
 use std::{
-    convert::TryInto,
     fmt::{self, Display},
     str::FromStr,
 };

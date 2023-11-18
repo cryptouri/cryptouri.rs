@@ -1,7 +1,6 @@
 //! SHA2 hash types
 
 use crate::{algorithm::SHA256_ALG_ID, error::Error};
-use std::convert::{TryFrom, TryInto};
 
 /// Size of a SHA-256 hash
 pub const SHA256_HASH_SIZE: usize = 32;

@@ -2,8 +2,7 @@
 //! with Bech32 encoding/checksums
 
 #![doc(
-    html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff",
-    html_root_url = "https://docs.rs/cryptouri/0.4.0"
+    html_logo_url = "https://avatars3.githubusercontent.com/u/40766087?u=0267cf8b7fe892bbf35b6114d9eb48adc057d6ff"
 )]
 #![forbid(unsafe_code)]
 #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
@@ -29,7 +28,6 @@ use crate::{
     encoding::{Encoding, DASHERIZED_ENCODING, URI_ENCODING},
     parts::Parts,
 };
-use secrecy::{ExposeSecret, SecretString};
 
 /// `CryptoUri`: URI-based format for encoding cryptographic objects
 pub struct CryptoUri {
@@ -37,7 +35,7 @@ pub struct CryptoUri {
     kind: CryptoUriKind,
 
     /// URI fragment (i.e. everything after `#`)
-    fragment: Option<SecretString>,
+    fragment: Option<String>,
 }
 
 /// Kinds of `CryptoUri`s
@@ -64,12 +62,12 @@ impl CryptoUri {
         let kind = if parts.prefix.starts_with(encoding.hash_scheme) {
             CryptoUriKind::Hash(Hash::new(
                 &parts.prefix[encoding.hash_scheme.len()..],
-                parts.data.expose_secret(),
+                parts.data.as_ref(),
             )?)
         } else if parts.prefix.starts_with(encoding.public_key_scheme) {
             CryptoUriKind::PublicKey(PublicKey::new(
                 &parts.prefix[encoding.public_key_scheme.len()..],
-                parts.data.expose_secret(),
+                parts.data.as_ref(),
             )?)
         } else if parts.prefix.starts_with(encoding.secret_key_scheme) {
             let alg_id = &parts.prefix[encoding.secret_key_scheme.len()..];
@@ -77,17 +75,14 @@ impl CryptoUri {
             if alg_id.contains(encoding.combine) {
                 // Multi-algorithm combination (e.g. KDF)
                 let alg_ids = alg_id.split(encoding.combine).collect::<Vec<_>>();
-                CryptoUriKind::SecretKey(SecretKey::new_combination(
-                    &alg_ids,
-                    parts.data.expose_secret(),
-                )?)
+                CryptoUriKind::SecretKey(SecretKey::new_combination(&alg_ids, parts.data.as_ref())?)
             } else {
-                CryptoUriKind::SecretKey(SecretKey::new(alg_id, parts.data.expose_secret())?)
+                CryptoUriKind::SecretKey(SecretKey::new(alg_id, parts.data.as_ref())?)
             }
         } else if parts.prefix.starts_with(encoding.signature_scheme) {
             CryptoUriKind::Signature(Signature::new(
                 &parts.prefix[encoding.signature_scheme.len()..],
-                parts.data.expose_secret(),
+                parts.data.as_ref(),
             )?)
         } else {
             return Err(Error::Scheme(parts.prefix.to_owned()));
@@ -95,7 +90,7 @@ impl CryptoUri {
 
         Ok(Self {
             kind,
-            fragment: parts.fragment,
+            fragment: parts.fragment.clone(),
         })
     }
 
@@ -168,9 +163,7 @@ impl CryptoUri {
 
     /// Obtain the fragment for this URI (i.e. everything after `#`)
     pub fn fragment(&self) -> Option<&str> {
-        self.fragment
-            .as_ref()
-            .map(|fragment| fragment.expose_secret().as_ref())
+        self.fragment.as_ref().map(|fragment| fragment.as_ref())
     }
 }
 

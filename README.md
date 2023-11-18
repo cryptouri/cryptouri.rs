@@ -37,7 +37,7 @@ CryptoURIs which have been mis-transcribed will fail to decode.
 
 ## Minimum Supported Rust Version
 
-- Rust **1.56+**
+- Rust **1.60+**
 
 ## Code of Conduct
 
@@ -74,7 +74,7 @@ The **cryptouri** Rust crate is dual licensed under your choice of either of:
 [safety-image]: https://img.shields.io/badge/unsafe-forbidden-success.svg
 [safety-link]: https://github.com/rust-secure-code/safety-dance/
 [license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
-[msrv-image]: https://img.shields.io/badge/rustc-1.56+-blue.svg
+[msrv-image]: https://img.shields.io/badge/rustc-1.60+-blue.svg
 
 [//]: # (links)
 
