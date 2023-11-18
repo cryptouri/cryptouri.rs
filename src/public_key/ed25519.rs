@@ -1,10 +1,6 @@
 //! Ed25519 public keys
 
-use crate::{
-    algorithm::ED25519_ALG_ID,
-    error::{Error, ErrorKind},
-};
-use anomaly::format_err;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
 use std::convert::{TryFrom, TryInto};
 
 /// Size of an Ed25519 public key
@@ -17,15 +13,13 @@ impl TryFrom<&[u8]> for Ed25519PublicKey {
     type Error = Error;
 
     fn try_from(slice: &[u8]) -> Result<Self, Error> {
-        slice.try_into().map(Ed25519PublicKey).map_err(|_| {
-            format_err!(
-                ErrorKind::ParseError,
-                "bad Ed25519 public key length: {} (expected {})",
-                slice.len(),
-                ED25519_PUBKEY_SIZE
-            )
-            .into()
-        })
+        slice
+            .try_into()
+            .map(Ed25519PublicKey)
+            .map_err(|_| Error::Length {
+                actual: slice.len(),
+                expected: ED25519_PUBKEY_SIZE,
+            })
     }
 }
 

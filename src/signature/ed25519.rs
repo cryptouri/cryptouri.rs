@@ -1,10 +1,6 @@
 //! Ed25519 signatures
 
-use crate::{
-    algorithm::ED25519_ALG_ID,
-    error::{Error, ErrorKind},
-};
-use anomaly::fail;
+use crate::{algorithm::ED25519_ALG_ID, error::Error};
 use core::convert::TryFrom;
 
 /// Size of an Ed25519 signature
@@ -20,12 +16,10 @@ impl TryFrom<&[u8]> for Ed25519Signature {
         // NOTE: Can't use `TryInto` here because `[u8; 64]` doesn't impl
         // `TryFrom<&[u8]>`
         if slice.len() != ED25519_SIGNATURE_SIZE {
-            fail!(
-                ErrorKind::ParseError,
-                "bad Ed25519 signature length: {} (expected {})",
-                slice.len(),
-                ED25519_SIGNATURE_SIZE
-            );
+            return Err(Error::Length {
+                actual: slice.len(),
+                expected: ED25519_SIGNATURE_SIZE,
+            });
         }
 
         let mut sig_bytes = [0u8; ED25519_SIGNATURE_SIZE];

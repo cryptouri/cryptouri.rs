@@ -4,9 +4,8 @@ use super::Algorithm;
 use crate::{
     algorithm::HKDFSHA256_ALG_ID,
     encoding::{Encodable, DASHERIZED_ENCODING, URI_ENCODING},
-    error::{Error, ErrorKind},
+    error::Error,
 };
-use anomaly::{fail, format_err};
 use secrecy::{DebugSecret, ExposeSecret, Secret};
 use std::convert::{TryFrom, TryInto};
 
@@ -27,11 +26,7 @@ impl HkdfSha256Key {
     /// Create a new HKDF-SHA-256 key
     pub fn new(bytes: &[u8], derived_alg: Algorithm) -> Result<Self, Error> {
         if derived_alg == Algorithm::HkdfSha256 {
-            fail!(
-                ErrorKind::ParseError,
-                "invalid algorithm at end of combination: {}",
-                derived_alg
-            );
+            return Err(Error::Algorithm(derived_alg.to_string()));
         }
 
         let mut key = Self::try_from(bytes)?;
@@ -55,13 +50,9 @@ impl TryFrom<&[u8]> for HkdfSha256Key {
                 ikm: Secret::new(bytes),
                 derived_alg: None,
             })
-            .map_err(|_| {
-                format_err!(
-                    ErrorKind::ParseError,
-                    "bad HKDF-SHA-256 secret key length: {} (expected 32-bytes)",
-                    slice.len(),
-                )
-                .into()
+            .map_err(|_| Error::Length {
+                actual: slice.len(),
+                expected: 32,
             })
     }
 }

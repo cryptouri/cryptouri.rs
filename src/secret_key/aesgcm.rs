@@ -2,9 +2,8 @@
 
 use crate::{
     algorithm::{AES128GCM_ALG_ID, AES256GCM_ALG_ID},
-    error::{Error, ErrorKind},
+    error::Error,
 };
-use anomaly::format_err;
 use secrecy::{DebugSecret, ExposeSecret, Secret};
 use std::convert::{TryFrom, TryInto};
 
@@ -31,13 +30,9 @@ macro_rules! impl_aes_gcm_key {
                 slice
                     .try_into()
                     .map(|bytes| $name(Secret::new(bytes)))
-                    .map_err(|_| {
-                        format_err!(
-                            ErrorKind::ParseError,
-                            concat!("bad ", $desc, "key: expected ", $key_size, "-bytes, got {}"),
-                            slice.len(),
-                        )
-                        .into()
+                    .map_err(|_| Error::Length {
+                        actual: slice.len(),
+                        expected: $key_size,
                     })
             }
         }

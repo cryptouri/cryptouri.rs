@@ -5,12 +5,7 @@ mod ed25519;
 
 pub use self::ed25519::Ed25519Signature;
 
-use crate::{
-    algorithm::ED25519_ALG_ID,
-    encoding::Encodable,
-    error::{Error, ErrorKind},
-};
-use anomaly::fail;
+use crate::{algorithm::ED25519_ALG_ID, encoding::Encodable, error::Error};
 use std::convert::TryInto;
 
 /// Signature algorithms
@@ -22,12 +17,10 @@ pub enum Signature {
 impl Signature {
     /// Create a new `Signature` for the given algorithm
     pub fn new(alg: &str, bytes: &[u8]) -> Result<Self, Error> {
-        let result = match alg {
-            ED25519_ALG_ID => Signature::Ed25519(bytes.try_into()?),
-            _ => fail!(ErrorKind::AlgorithmInvalid, "{}", alg),
-        };
-
-        Ok(result)
+        match alg {
+            ED25519_ALG_ID => Ok(Signature::Ed25519(bytes.try_into()?)),
+            _ => Err(Error::Algorithm(alg.to_owned())),
+        }
     }
 
     /// Return an `Ed25519Signature` if the underlying signature is Ed25519
