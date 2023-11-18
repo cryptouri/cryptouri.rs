@@ -4,9 +4,8 @@
 [![Docs][docs-image]][docs-link]
 [![Build Status][build-image]][build-link]
 [![Safety Dance][safety-image]][safety-link]
-![MSRV][msrv-image]
 ![Apache 2.0+MIT Licensed][license-image]
-[![Gitter Chat][gitter-image]][gitter-link]
+![MSRV][msrv-image]
 
 A URI-like format for serializing cryptographic objects including keys,
 signatures, and digests using URI generic syntax:
@@ -77,20 +76,18 @@ The **cryptouri** Rust crate is dual licensed under your choice of either of:
 
 [//]: # (badges)
 
-[crate-image]: https://img.shields.io/crates/v/cryptouri.svg
+[crate-image]: https://buildstats.info/crate/cryptouri
 [crate-link]: https://crates.io/crates/cryptouri
 [docs-image]: https://docs.rs/cryptouri/badge.svg
 [docs-link]: https://docs.rs/cryptouri/
-[build-image]: https://github.com/cryptouri/cryptouri.rs/workflows/Rust/badge.svg?branch=develop&event=push
-[build-link]: https://github.com/cryptouri/cryptouri.rs/actions
-[msrv-image]: https://img.shields.io/badge/rustc-1.39+-blue.svg
+[build-image]: https://github.com/cryptouri/cryptouri.rs/actions/workflows/cryptouri.yml/badge.svg
+[build-link]: https://github.com/cryptouri/cryptouri.rs/actions/workflows/cryptouri.yml
 [safety-image]: https://img.shields.io/badge/unsafe-forbidden-success.svg
 [safety-link]: https://github.com/rust-secure-code/safety-dance/
 [license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
-[gitter-image]: https://badges.gitter.im/badge.svg
-[gitter-link]: https://gitter.im/cryptouri/Lobby
+[msrv-image]: https://img.shields.io/badge/rustc-1.39+-blue.svg
 
-[//]: # (general links)
+[//]: # (links)
 
 [Bech32]: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
 [cc]: https://contributor-covenant.org
