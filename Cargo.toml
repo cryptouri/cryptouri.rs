@@ -1,18 +1,16 @@
 [package]
-name        = "cryptouri"
-description = """
-URN-like namespace for cryptographic objects (keys, signatures,
-etc) with Bech32 encoding/checksums
-"""
-version     = "0.4.0" # Also update html_root_url in lib.rs when bumping this
-authors     = ["Tony Arcieri <bascule@gmail.com>"]
-license     = "Apache-2.0 OR MIT"
-homepage    = "https://github.com/cryptouri"
-repository  = "https://github.com/cryptouri/cryptouri.rs/"
-readme      = "README.md"
-edition     = "2018"
-categories  = ["cryptography", "encoding"]
-keywords    = ["bech32", "cryptography", "keys", "security", "uri"]
+name = "cryptouri"
+description = "URN-like namespace for cryptographic objects (keys, signatures, etc) with Bech32 encoding/checksums"
+version = "0.5.0-pre"
+authors = ["Tony Arcieri <bascule@gmail.com>"]
+license = "Apache-2.0 OR MIT"
+homepage = "https://github.com/cryptouri"
+repository = "https://github.com/cryptouri/cryptouri.rs/"
+readme = "README.md"
+categories = ["cryptography", "encoding"]
+keywords = ["bech32", "cryptography", "keys", "security", "uri"]
+edition = "2021"
+rust-version = "1.56"
 
 [badges]
 travis-ci = { repository = "cryptouri/cryptouri.rs" }

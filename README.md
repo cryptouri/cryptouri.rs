@@ -37,18 +37,7 @@ CryptoURIs which have been mis-transcribed will fail to decode.
 
 ## Minimum Supported Rust Version
 
-- Rust **1.39+**
-
-## Help and Discussion
-
-Have questions? Want to suggest a feature or change?
-
-- [Gitter]: web-based chat about **cryptouri**
-- [Google Group]: join via web or email ([cryptouri+subscribe@googlegroups.com])
-
-[Gitter]: https://gitter.im/cryptouri/Lobby
-[Google Group]: https://groups.google.com/forum/#!forum/cryptouri
-[cryptouri+subscribe@googlegroups.com]: mailto:cryptouri+subscribe@googlegroups.com
+- Rust **1.56+**
 
 ## Code of Conduct
 
@@ -71,8 +60,8 @@ conditions.
 
 The **cryptouri** Rust crate is dual licensed under your choice of either of:
 
-- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+- Apache License, Version 2.0, ([LICENSE-APACHE] or http://www.apache.org/licenses/LICENSE-2.0)
+- MIT license ([LICENSE-MIT] or http://opensource.org/licenses/MIT)
 
 [//]: # (badges)
 
@@ -85,7 +74,7 @@ The **cryptouri** Rust crate is dual licensed under your choice of either of:
 [safety-image]: https://img.shields.io/badge/unsafe-forbidden-success.svg
 [safety-link]: https://github.com/rust-secure-code/safety-dance/
 [license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
-[msrv-image]: https://img.shields.io/badge/rustc-1.39+-blue.svg
+[msrv-image]: https://img.shields.io/badge/rustc-1.56+-blue.svg
 
 [//]: # (links)
 
